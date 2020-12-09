@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=/usr/bin/gnome-terminal -- sudo bash /home/clement/.decrypt.sh
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[en_US]=Decryption
+Name=Decryption
+Comment[en_US]=Decryption
+Comment=Decryption
