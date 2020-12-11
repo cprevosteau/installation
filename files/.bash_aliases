@@ -3,12 +3,13 @@ alias gicam='git commit -am'
 alias gitus='git status'
 alias gico='git checkout'
 alias gicob='gico -b'
+alias sourcebash='source ${HOME}/.bashrc'
 
 function gipam {
 	giciam "$1" && git push
 }
 function gipamu {
 	CURRENT_BRANCH=`git branch --show-current`
-	echo "Set $CURRENT_BRANCH as upstream branch"
-	giciam "$1" && git push -u origin "$CURRENT_BRANCH"
+	echo "Set ${CURRENT_BRANCH} as upstream branch"
+	giciam "$1" && git push -u origin "${CURRENT_BRANCH}"
 }

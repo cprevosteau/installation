@@ -1,7 +1,8 @@
 ##!/usr/bin/env bash
-DOCKER_DIR="$SYSTEM_DIR/docker"
+set -euxo pipefail
+readonly script_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-
+DOCKER_DIR="${SYSTEM_DIR}/docker"
 echo Remove old docker and install dependencies
 sudo apt-get remove docker docker-engine docker.io containerd runc
 sudo apt-get update
@@ -27,12 +28,12 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
 DOCKER_DAEMON_DIR="/etc/docker"
 ORIGINAL_DATA_DIR="/var/lib/docker"
-echo Set docker directory : $DOCKER_DIR
+echo Set docker directory : ${DOCKER_DIR}
 sudo systemctl stop docker.socket
 sudo systemctl stop docker
-sudo rm -rf "$ORIGINAL_DATA_DIR"
-echo "{\"data-root\": \"$DOCKER_DIR\"}" | sudo tee -a "$DOCKER_DAEMON_DIR/daemon.json" >/dev/null
-sudo cat "$DOCKER_DAEMON_DIR/daemon.json"
+sudo rm -rf "${ORIGINAL_DATA_DIR}"
+echo "{\"data-root\": \"${DOCKER_DIR}\"}" | sudo tee -a "${DOCKER_DAEMON_DIR}/daemon.json" >/dev/null
+sudo cat "${DOCKER_DAEMON_DIR}/daemon.json"
 sudo systemctl start docker.socket
 sudo systemctl start docker
 
