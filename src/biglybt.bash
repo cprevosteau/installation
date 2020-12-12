@@ -7,7 +7,7 @@ install_biglybt() {
   wget -O "${bigly_path}" "https://files.biglybt.com/installer/${bigly_file}"
   sh "${bigly_path}"
   rm "${bigly_path}"
-  include utils.sh
+  include utils.bash
   move_from_home_to_system .biglybt
 }
 

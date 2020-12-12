@@ -1,7 +1,7 @@
 ##!/usr/bin/env bash
 set -euxo pipefail
 readonly installation_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-. "${installation_dir}/src/import_src_and_env.sh"
+. "${installation_dir}/src/import_src_and_env.bash"
 
 install_pyenv() {
   echo Install prerequisites
@@ -10,7 +10,7 @@ install_pyenv() {
     xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
 
   git clone https://github.com/pyenv/pyenv.git "${PYENV_DIR}"
-  include config_pyenv.sh
+  include config_pyenv.bash
 }
 
 install_pyenv

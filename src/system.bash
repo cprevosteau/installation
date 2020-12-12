@@ -1,6 +1,6 @@
 ##!/usr/bin/env bash
 set -euxo pipefail
-include utils.sh
+include utils.bash
 
 config_system() {
   local -r original_dirs=(

@@ -6,10 +6,10 @@ alias gicob='gico -b'
 alias sourcebash='source ${HOME}/.bashrc'
 
 function gipam {
-	giciam "$1" && git push
+	gicam "$1" && git push
 }
 function gipamu {
-	CURRENT_BRANCH=`git branch --show-current`
-	echo "Set ${CURRENT_BRANCH} as upstream branch"
-	giciam "$1" && git push -u origin "${CURRENT_BRANCH}"
+	local current_branch=`git branch --show-current`
+	echo "Set ${current_branch} as upstream branch"
+	gicam "$1" && git push -u origin "${current_branch}"
 }

@@ -5,7 +5,7 @@ test_src() {
   local -r src_dir="${tests_dir}/../src"
   echo "$src_dir"
   (
-    . "${src_dir}/import_src_and_env.sh"
-    . "${src_dir}/${src_file}.sh"
+    . "${src_dir}/import_src_and_env.bash"
+    . "${src_dir}/${src_file}.bash"
   )
 }
