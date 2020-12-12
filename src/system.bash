@@ -3,7 +3,7 @@ set -euxo pipefail
 include utils.sh
 
 config_system() {
-  original_dirs=(
+  local -r original_dirs=(
     ".cache"
     "Downloads"
     ".ssh"
