@@ -1,4 +1,4 @@
-include .env
+include env/.env*
 export
 
 add_test_src_to_bashrc:
@@ -12,3 +12,8 @@ get_into_docker:
 
 test:
 	echo $USER
+
+install_bats_and_add_ons:
+	git submodule add https://github.com/ztombol/bats-support tests/test_helpers/bats-support
+	git submodule add https://github.com/ztombol/bats-assert tests/test_helpers/bats-assert
+	git submodule add https://github.com/ztombol/bats-file tests/test_helpers/bats-file
