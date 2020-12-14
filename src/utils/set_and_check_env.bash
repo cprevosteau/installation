@@ -1,6 +1,4 @@
 ##!/usr/bin/env bash
-set -euo pipefail
-
 
 set_and_check_env(){
   local required_env_file="env/.env_required"
@@ -15,7 +13,7 @@ set_and_check_env(){
 export_env () {
   local -r env_file="${1}"
   set -a
-  # shellcheck source=/dev/null
+  # shellcheck source=../../../../../../dev/null
   [ -f "${env_file}" ] && . "${env_file}"
   set +a
 }

@@ -2,10 +2,11 @@
 set -euo pipefail
 
 import_src_and_env() {
-  local -r src_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-  . "${src_dir}/loader.bash"
+  local -r utils_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+  . "${utils_dir}/loader.bash"
+  local src_dir="${utils_dir}/.."
   loader_addpath "${src_dir}"
-  include set_and_check_env.bash
+  include utils/set_and_check_env.bash
 
   pushd "${src_dir}/.."
   set_and_check_env

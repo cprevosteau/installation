@@ -14,7 +14,16 @@ test_docker_src() {
   local -r src_file="${1}"
   local -r src_dir="${tests_dir}/../src"
   (
-    . "${src_dir}/import_src_and_env.bash" >/dev/null
+    . "${src_dir}/utils/import_src_and_env.bash" >/dev/null
     docker run -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" encrypted:latest bats "${tests_dir}/src/${src_file}.bats"
+  )
+}
+
+test_docker_real_install() {
+  local -r src_file="${1}"
+  local -r src_dir="${tests_dir}/../src"
+  (
+    . "${src_dir}/utils/import_src_and_env.bash" >/dev/null
+    docker run -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" encrypted:latest bats --tap  "${tests_dir}/real_install/${src_file}.bats"
   )
 }
