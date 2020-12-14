@@ -1,5 +1,4 @@
 ##!/usr/bin/env bash
-set -euxo pipefail
 
 move_dir_and_set_symbolic_link() {
   local -r original_dir="${1}"

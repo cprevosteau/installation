@@ -12,6 +12,10 @@ get_into_docker:
 
 tests_in_docker:
 	docker run -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" encrypted:latest
+	docker run -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" encrypted:latest bats -r "${TESTS_DIR}/test_helpers/helpers"
+
+tests_in_docker_tap:
+	docker run -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" encrypted:latest bats -r --tap "${TESTS_DIR}/src"
 
 install_bats_and_add_ons:
 	git submodule add https://github.com/bats-core/bats-support tests/test_helpers/bats-support

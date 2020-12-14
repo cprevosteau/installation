@@ -14,7 +14,7 @@ teardown() {
 }
 
 @test "real installation miniconda" {
-    run_set install_miniconda >&3
+    run_set install_miniconda 2>&3 1>&3
     assert_dir_exist "${MINICONDA_DIR}"
     cat "${HOME}/.bashrc"
     command -v jupyter

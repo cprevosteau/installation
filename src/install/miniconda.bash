@@ -1,6 +1,5 @@
 ##!/usr/bin/env bash
 include utils/download.bash
-include config/miniconda.bash
 
 install_miniconda() {
   local -r miniconda_tmp_file="/tmp/miniconda_installer.sh"

@@ -5,19 +5,18 @@ setup() {
     # executed before each test
     echo "setup" >&3
     load_src install/bats
-    bats_file="/usr/bin/bats"
-    sudo mv /usr/bin/bats /tmp
+    bats_file="/usr/local/bin/bats"
 }
 
 teardown() {
     # executed after each test
     echo "teardown" >&3
-    sudo mv /tmp/bats "${bats_file}"
 }
 
 @test "install_bats" {
     run_set install_bats
     command -v bats
     assert_dir_exist "${APP_DIR}/bats-core"
+    ls /usr/local/bin >&3
     assert_file_exist "${bats_file}"
 }
