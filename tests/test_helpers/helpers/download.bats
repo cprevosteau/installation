@@ -11,7 +11,7 @@ setup() {
 teardown() {
     # executed after each test
     echo "teardown" >&3
-    rm "${tmp_file}"
+    [ ! -f "$tmp_file" ] || rm "${tmp_file}"
 }
 
 @test "test download_status_code_to_file" {
@@ -21,7 +21,6 @@ teardown() {
 }
 
 @test "test download_status_code_to_stream" {
-    run_set download_status_code_to_stream "${url}" >"${tmp_file}"
-    assert_file_exist "${tmp_file}"
-    [ "$(cat ${tmp_file})" -eq 200 ]
+    run_set download_status_code_to_stream "${url}"
+    assert_output "200"
 }
