@@ -21,12 +21,14 @@ teardown() {
 
 @test "test download_file" {
     run_set download_file https://www.google.com "${tmp_file_path}"
+    assert_success
     assert_file_exist "${tmp_file_path}"
     [[ "$(awk 'NR==1' "${tmp_file_path}")" =~ "<!doctype html>" ]]
 }
 
 @test "test download_stream" {
     run_set download_stream https://www.google.com
+    assert_success
     assert_output --partial '<!doctype html>'
 }
 
@@ -40,6 +42,7 @@ teardown() {
       cat "${compressed_tmp_file}"
     }
     run_set download_extract_to_dir "www.google.com" "${tmp_output_dir}"
+    assert_success
     assert_dir_exist "${tmp_output_dir}/${tmp_file}"
     assert_file_exist "${tmp_output_dir}/${tmp_file}/test.test"
 }

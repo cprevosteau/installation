@@ -27,6 +27,7 @@ teardown() {
       echo "config_intellij_pycharm"
     }
     run_set install_intellij_pycharm >&3 2>&3
+    assert_success
     echo test intellij >&3
     assert_file_exist "${intellij_file}"
     assert_equal "$(cat "${intellij_file}")" 200

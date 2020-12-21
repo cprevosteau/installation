@@ -1,5 +1,13 @@
 ##!/usr/bin/env bash
-set -euxo pipefail
+include utils/run_with_sudo.bash
+
+
+install_docker() {
+  remove_old_docker_install
+  install_docker_package
+  add_user_to_docker_group
+  set_data_root_directory "$SYSTEM_DIR/docker"
+}
 
 remove_old_docker_install() {
   echo Remove old docker and install dependencies
@@ -27,30 +35,33 @@ install_docker_package() {
   sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 }
 
-configure_data_docker() {
-  local -r docker_dir="${SYSTEM_DIR}/docker"
-  local -r docker_daemon_dir="/etc/docker"
-  local -r original_data_dir="/var/lib/docker"
-  echo "Set docker directory : ${docker_dir}"
-  sudo systemctl stop docker.socket
-  sudo systemctl stop docker
-  sudo rm -rf "${original_data_dir}"
-  echo "{\"data-root\": \"${docker_dir}\"}" | sudo tee -a "${docker_daemon_dir}/daemon.json" >/dev/null
-  sudo cat "${docker_daemon_dir}/daemon.json"
-  sudo systemctl start docker.socket
-  sudo systemctl start docker
-}
-
 add_user_to_docker_group() {
-  sudo groupadd docker
   sudo usermod -aG docker "${USER}"
   echo "You need to log out (and log in) to be able to use docker."
 }
 
-install_docker() {
-  remove_old_docker_install
-  install_docker_package
-  configure_data_docker
+set_data_root_directory() {
+    local new_docker_dir="$1"
+    mkdir -p "$new_docker_dir"
+    local docker_daemon_file="/etc/docker/daemon.json"
+    if [ ! -f "$docker_daemon_file" ]; then
+        sudo mkdir -p "$(dirname $docker_daemon_file)"
+        echo '{}' | sudo tee -a "$docker_daemon_file"
+    fi
+    sudo systemctl stop docker.socket
+    sudo systemctl stop docker
+    run_with_sudo add_string_entry_to_json "data-root" "$new_docker_dir" "$docker_daemon_file"
+    sudo systemctl start docker.socket
+    sudo systemctl start docker
+}
+
+add_string_entry_to_json(){
+    local entry="$1"
+    local value="$2"
+    local file="$3"
+    local tmp_file="/tmp/new_json.json"
+    jq ".[\"$entry\"] |= \"$value\"" "$file" > "$tmp_file"
+    mv "$tmp_file" "$file"
 }
 
 #Test

@@ -1,11 +1,11 @@
 #!/usr/bin/env bats
-load ../../import_helpers
+load ../../../import_helpers
 
 setup() {
     # executed before each test
     echo "setup" >&3
     tmp_file="status_code_file"
-    url="https://www.google.com"
+    url="https://www.google.fr"
 }
 
 teardown() {
@@ -15,12 +15,13 @@ teardown() {
 }
 
 @test "test download_status_code_to_file" {
-    run_set download_status_code_to_file "${url}" "${tmp_file}"
+    cmd_set download_status_code_to_file "${url}" "${tmp_file}"
     assert_file_exist "${tmp_file}"
-    [ "$(cat ${tmp_file})" -eq 200 ]
+    assert_equal "$(cat ${tmp_file})"  "200"
 }
 
 @test "test download_status_code_to_stream" {
-    run_set download_status_code_to_stream "${url}"
+    # shellcheck disable=SC2155
+    local output=$(cmd_set download_status_code_to_stream "${url}")
     assert_output "200"
 }

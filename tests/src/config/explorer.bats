@@ -31,6 +31,7 @@ teardown() {
 
     # When
     run_set add_folders_to_bookmark "${folder1}" "${folder2}"
+    assert_success
 
     # THen
     assert_file_exist "${bookmark_file}"

@@ -1,5 +1,5 @@
 FROM ubuntu:20.04
-RUN apt-get update && apt-get install -y git sudo bats gettext-base wget
+RUN apt-get update && apt-get install -y bats gettext-base git rsync sudo wget
 ARG USER
 ENV USER=$USER
 RUN useradd -ms /bin/bash $USER &&\
@@ -16,4 +16,6 @@ RUN set -a; . "./$ENV_REQUIRED"; set +a &&\
 ARG TESTS_DIR
 ENV TESTS_DIR=$TESTS_DIR
 WORKDIR $HOME
+COPY dockers/entrypoint.sh entrypoint.sh
+ENTRYPOINT ["sh", "entrypoint.sh"]
 CMD bats -r "${TESTS_DIR}/src"

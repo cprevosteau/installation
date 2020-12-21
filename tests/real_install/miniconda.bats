@@ -6,8 +6,7 @@ load_src install/miniconda
 setup() {
     # executed before each test
     echo "setup" >&3
-
-
+    mock_download_func_to_use_stored_data download_file
 }
 
 teardown() {
@@ -16,10 +15,8 @@ teardown() {
 }
 
 @test "real installation miniconda" {
-    mock_download_func download_file
-    run_set install_miniconda
+    cmd_set install_miniconda 2>&3
     assert_dir_exist "${MINICONDA_DIR}"
-    cat "${HOME}/.bashrc"
     command -v jupyter
-    env -i bash -c "command -v conda"
+    env -i bash -ic "command -v conda"
 }

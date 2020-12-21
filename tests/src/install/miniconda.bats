@@ -1,10 +1,10 @@
 #!/usr/bin/env bats
 load ../../import_helpers
+load_src install/miniconda
 
 setup() {
     # executed before each test
     echo "setup" >&3
-    load_src install/miniconda
     tmp_miniconda_file="${BATS_TMPDIR}/miniconda_status_code"
 }
 
@@ -17,15 +17,17 @@ teardown() {
 @test "Test download miniconda (Is link active ?)" {
     download_file() {
       local url="${1}"
-      local output_file="${2}"
-      download_status_code_to_file "${url}" "${output_file}"
+      local status_code_file="$2"
+      download_status_code_to_file "${url}" "$status_code_file"
     }
-    run_set download_miniconda "${tmp_miniconda_file}"
-    assert_file_exist "${tmp_miniconda_file}"
-    assert_equal "$(cat "${tmp_miniconda_file}")" 200
+    cmd_set download_miniconda "$tmp_miniconda_file"
+    assert_file_exist "$tmp_miniconda_file"
+    local status_code
+    status_code=$(cat "$tmp_miniconda_file")
+    assert_equal "$status_code" 200
 }
 
-@test "Test integration install miniconda" {
+@test "Test install miniconda package" {
     download_file() {
       local url="${1}"
       local output_file="${2}"
@@ -40,6 +42,7 @@ teardown() {
       echo config_miniconda
     }
     run_set install_miniconda
+    assert_success
     assert_file_not_exist "/tmp/miniconda_installer.sh"
     assert_equal "${lines[0]}" "config_miniconda"
     assert_equal "${lines[1]}"  "conda install -y -c conda-forge jupyterlab"

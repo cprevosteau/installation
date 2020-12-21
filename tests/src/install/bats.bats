@@ -14,9 +14,8 @@ teardown() {
 }
 
 @test "install_bats" {
-    run_set install_bats
+    cmd_set install_bats 2>&3
     command -v bats
     assert_dir_exist "${APP_DIR}/bats-core"
-    ls /usr/local/bin >&3
     assert_file_exist "${bats_file}"
 }

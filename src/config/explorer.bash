@@ -22,3 +22,5 @@ set_show_hidden_files() {
 set_dark_theme() {
   gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
 }
+
+

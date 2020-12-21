@@ -7,7 +7,7 @@ import_src_and_env() {
   loader_addpath "${src_dir}"
   include utils/set_and_check_env.bash
 
-  pushd "${src_dir}/.." || exit
+  pushd "${src_dir}/.." >/dev/null || exit
   set_and_check_env
-  popd || exit
+  popd >/dev/null || exit
 }
