@@ -29,7 +29,6 @@ RUN    apt-get update && \
             dbus                                 \
             iptables                             \
             iproute2                             \
-            jq                                   \
             kmod                                 \
             locales                              \
             udev &&                              \

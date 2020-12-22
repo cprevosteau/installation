@@ -51,6 +51,11 @@ skip_if_not_in_docker(){
     [[ "$HOSTNAME" =~ $docker_hostname_regexp  ]] || skip
 }
 
+skip_if_in_docker(){
+    local docker_hostname_regexp="[[:xdigit:]]{12}"
+    [[ ! "$HOSTNAME" =~ $docker_hostname_regexp  ]] || skip
+}
+
 add_cmd_to_func_def() {
     local func_def="$1"
     local first_cmd_to_add=("${@:2}")
@@ -83,7 +88,20 @@ assert_command_exist() {
     assert [ "$( command -v "$cmd")" ]
 }
 
+create_file() {
+    local filepath="$1"
+    local dir
+    dir=$(dirname "$filepath")
+    mkdir -p "$dir"
+    touch "$filepath"
+}
+
 delete_if_file_exist() {
     local filepath="$1"
     [ ! -f "$filepath" ] || rm "$filepath"
+}
+
+delete_if_directory_exist() {
+    local directory="$1"
+    [ ! -d "$directory" ] || rm -rf "$directory"
 }

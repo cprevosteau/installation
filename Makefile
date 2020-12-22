@@ -41,7 +41,7 @@ get_into_last_docker:
 	docker start -a -i `docker ps -q -l`
 
 tests_in_docker:
-	docker run -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" encrypted:latest
+	docker run --privileged -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" encrypted:latest
 	docker run -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" encrypted:latest bats -r "${TESTS_DIR}/test_helpers/helpers"
 
 tests_in_docker_tap:

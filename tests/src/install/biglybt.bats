@@ -31,6 +31,7 @@ teardown() {
     local expected_output="$APP_DIR/biglybt
 y
 2
+n
 7"
     echo "while read data; do echo \$data; done" > "$tmp_biglybt_installer"
     run_set install_biglybt_from_installer_without_display "$tmp_biglybt_installer"

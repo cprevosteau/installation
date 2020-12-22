@@ -1,5 +1,5 @@
 #!/usr/bin/env bats
-load '../../import_helpers'
+load '../import_helpers'
 
 setup() {
     # executed before each test

@@ -20,7 +20,7 @@ test_docker_src() {
   local -r src_dir="${tests_dir}/../src"
   (
     . "${src_dir}/utils/import_src_and_env.bash" && import_src_and_env
-    docker run -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" -v "/tmp/archives:/var/cache/apt/archives" encrypted:latest bats "${tests_dir}/src/${src_file}.bats" "${option}"
+    docker run --privileged -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" -v "/tmp/archives:/var/cache/apt/archives" encrypted:latest bats "${tests_dir}/src/${src_file}.bats" "${option}"
   )
 }
 
