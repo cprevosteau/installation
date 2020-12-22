@@ -21,6 +21,7 @@ build_dockers:
 	make build_docker
 	make build_docker_with_java
 	make build_docker_with_systemd
+	make build_docker_with_docker
 
 set_normal_data_root:
 	source "src/utils/import_src_and_env.bash" && import_src_and_env \

@@ -1,12 +1,16 @@
 ##!/usr/bin/env bash
-set -euxo pipefail
-readonly script_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-set -ex
+include utils/download.bash
 
-echo Installation of miniconda and essential packages
-OTHERS_INSTALLATION_DIR=$(dirname "$(readlink -f "$0")")
-echo Installation directory : "${OTHERS_INSTALLATION_DIR}"
-source "${OTHERS_INSTALLATION_DIR}/../env.sh"
+install_poetry(){
+    download_poetry | install_poetry_package "$POETRY_DIR"
+}
 
-echo Installation de poetry
-curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | POETRY_HOME="${ENCRYPTED_DIR}/app/poetry" python -
+download_poetry() {
+    local installer_url="https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py"
+    download_stream "$installer_url"
+}
+
+install_poetry_package(){
+    local poetry_dir="$1"
+    POETRY_HOME="$poetry_dir" python -
+}

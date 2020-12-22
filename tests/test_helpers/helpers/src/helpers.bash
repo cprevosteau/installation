@@ -78,6 +78,11 @@ assert_valid_json() {
     jq -e . "$json_file" >/dev/null 2>&1
 }
 
+assert_command_exist() {
+    local cmd="$1"
+    assert [ "$( command -v "$cmd")" ]
+}
+
 delete_if_file_exist() {
     local filepath="$1"
     [ ! -f "$filepath" ] || rm "$filepath"

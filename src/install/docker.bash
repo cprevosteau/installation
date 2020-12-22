@@ -6,7 +6,7 @@ install_docker() {
   remove_old_docker_install
   install_docker_package
   add_user_to_docker_group
-  set_data_root_directory "$SYSTEM_DIR/docker"
+  set_data_root_directory "$DOCKER_ROOT_DIR"
 }
 
 remove_old_docker_install() {
@@ -63,8 +63,3 @@ add_string_entry_to_json(){
     jq ".[\"$entry\"] |= \"$value\"" "$file" > "$tmp_file"
     mv "$tmp_file" "$file"
 }
-
-#Test
-#Clean up
-#sudo systemctl stop docker.socket && sudo systemctl stop docker sudo apt-get remove -y --purge docker-* containerd* \
-# && sudo rm -rf /etc/docker/ && sudo rm -rf /var/lib/docker && sudo apt autoremove -y

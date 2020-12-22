@@ -20,9 +20,7 @@ FROM encrypted:latest
 # Systemd installation
 #
 USER root
-ENV TZ=Europe/Paris
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone &&\
-    apt-get update && \
+RUN    apt-get update && \
     apt-get install -y --no-install-recommends   \
             systemd                              \
             systemd-sysv                         \
@@ -34,7 +32,6 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone &
             jq                                   \
             kmod                                 \
             locales                              \
-            tzdata                               \
             udev &&                              \
                                                  \
     # Prevents journald from reading kernel messages from /dev/kmsg

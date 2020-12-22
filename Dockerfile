@@ -1,5 +1,7 @@
 FROM ubuntu:20.04
-RUN apt-get update && apt-get install -y bats gettext-base git rsync sudo wget
+ENV TZ=Europe/Paris
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone &&\
+    apt-get update && apt-get install -y bats gettext-base git rsync sudo tzdata wget
 ARG USER
 ENV USER=$USER
 RUN useradd -ms /bin/bash $USER &&\

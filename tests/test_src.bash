@@ -20,7 +20,7 @@ test_docker_src() {
   local -r src_dir="${tests_dir}/../src"
   (
     . "${src_dir}/utils/import_src_and_env.bash" && import_src_and_env
-    docker run -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" encrypted:latest bats "${tests_dir}/src/${src_file}.bats" "${option}"
+    docker run -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" -v "/tmp/archives:/var/cache/apt/archives" encrypted:latest bats "${tests_dir}/src/${src_file}.bats" "${option}"
   )
 }
 
@@ -29,7 +29,9 @@ test_docker_real_install() {
   local -r src_dir="${tests_dir}/../src"
   (
     . "${src_dir}/utils/import_src_and_env.bash" && import_src_and_env
-    docker run -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" -v "${DATA_DIR}:${DATA_DIR}" encrypted:latest bats --tap  "${tests_dir}/real_install/${src_file}.bats"
+    docker run -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" \
+        -v "${DATA_DIR}:${DATA_DIR}" -v "/tmp/archives:/var/cache/apt/archives" \
+        encrypted:latest bats --tap  "${tests_dir}/real_install/${src_file}.bats"
   )
 }
 

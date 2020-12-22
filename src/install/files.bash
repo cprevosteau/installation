@@ -1,5 +1,4 @@
 ##!/usr/bin/env bash
-set -euxo pipefail
 
 set_decryption_desktop() {
   local -r tmp_config="/tmp/config"
@@ -8,6 +7,4 @@ set_decryption_desktop() {
   envsubst <"${FILES_DIR}/${DECRYPTION_DESKTOP_FILE}" >>"${tmp_config}/autostart/${DECRYPTION_DESKTOP_FILE}"
   sudo umount "${tmp_config}"
 }
-
-set_decryption_desktop
 

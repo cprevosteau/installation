@@ -17,7 +17,7 @@ change_data_root() {
     old_path="$(jq '.["data-root"]' $docker_daemon_file | tr -d '"')"
     if [ ! "$old_path" = "$new_path" ]; then
         # shellcheck disable=SC2086
-        sudo rsync -aP "$old_path/" "$new_path"
+        sudo rsync -aP "$old_path/" "$new_path" && rm -rf "$old_path"
         set_data_root_directory "$new_path"
     fi
 }

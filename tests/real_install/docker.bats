@@ -21,5 +21,5 @@ teardown() {
     actual_data_root=$(sudo docker info 2>/dev/null | grep "Docker Root Dir" | awk '(NR == 1){print $4}')
     echo "$actual_data_root $SYSTEM_DIR/docker" >&3
     assert_equal "$actual_data_root" "$SYSTEM_DIR/docker"
-    runuser -l "$USER" -c "docker run hello-world"
+    sudo runuser -l "$USER" -c "docker run hello-world"
 }
