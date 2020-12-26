@@ -1,6 +1,5 @@
 ##!/usr/bin/env bash
-set -euxo pipefail
-include utils.bash
+include utils/move_to_system.bash
 
 config_system() {
   local -r original_dirs=(
@@ -13,5 +12,3 @@ config_system() {
     move_from_home_to_system "${directory}"
   done
 }
-
-config_system

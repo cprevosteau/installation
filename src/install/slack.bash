@@ -1,11 +1,8 @@
 ##!/usr/bin/env bash
-set -euxo pipefail
-readonly script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+include utils/download.bash
 
-slack() {
+install_slack() {
   tmp_file="/tmp/slack.deb"
-  wget -c -O "${tmp_file}" https://downloads.slack-edge.com/linux_releases/slack-desktop-4.11.3-amd64.deb
-  sudo apt install "${tmp_file}"
+  download_file https://downloads.slack-edge.com/linux_releases/slack-desktop-4.11.3-amd64.deb "$tmp_file"
+  sudo apt install -y "${tmp_file}"
 }
-
-slack

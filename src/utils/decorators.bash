@@ -2,10 +2,17 @@
 
 run_with_sudo() {
     local func_name="$1"
-    local cmd_arr=( "${@}" )
+    local cmd_arr=( "$@" )
     local cmd_str
     cmd_str=$(make_cmd "${cmd_arr[@]}")
     sudo bash -c "$(declare -f "$func_name"); $cmd_str"
+}
+
+eval_cmd() {
+    cmd_arr=( "$@" )
+    local cmd_str
+    cmd_str=$(make_cmd "${cmd_arr[@]}" )
+    eval "$cmd_str"
 }
 
 make_cmd () {

@@ -1,5 +1,5 @@
 ##!/usr/bin/env bash
-include utils/run_with_sudo.bash
+include utils/decorators.bash
 
 
 install_docker() {
