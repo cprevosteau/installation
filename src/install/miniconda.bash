@@ -18,7 +18,7 @@ install_miniconda_package() {
 }
 
 install_base_python_packages(){
-    conda install -y -c conda-forge jupyterlab
+    conda install -y -c conda-forge jupyterlab jupytext
 }
 
 download_miniconda() {

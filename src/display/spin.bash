@@ -94,5 +94,4 @@ stop_spin_on_fail() {
     cursor_back
     printf "%b  %s" "$red_cross" "$msg"
     cleanup_terminal
-    exit 1
 }

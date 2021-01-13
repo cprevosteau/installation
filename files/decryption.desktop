@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Exec=/usr/bin/gnome-terminal -- sudo bash ${HOME}/${DECRYPT_FILE}
+Exec=/usr/bin/gnome-terminal -- bash $HOME/$DECRYPT_FILE
 Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true

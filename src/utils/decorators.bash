@@ -9,7 +9,7 @@ run_with_sudo() {
 }
 
 eval_cmd() {
-    cmd_arr=( "$@" )
+    local cmd_arr=( "$@" )
     local cmd_str
     cmd_str=$(make_cmd "${cmd_arr[@]}" )
     eval "$cmd_str"
