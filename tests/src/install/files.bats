@@ -11,7 +11,6 @@ setup() {
     src_file_path="/tmp/files/test.test"
     filename="test.test"
     create_file "$src_file_path"
-    assert_file_not_exist "$target_dir/$filename"
 }
 
 teardown() {
@@ -19,19 +18,43 @@ teardown() {
     echo "teardown" >&3
     delete_if_file_exist "$src_file_path"
     delete_if_directory_exist "$target_dir"
+    sudo umount "$mounted_dir" || true
     delete_if_directory_exist "$mounted_dir"
 }
 
 @test "test set file via mounted dir" {
 
     assert_dir_not_exist "$mounted_dir"
-    assert_file_not_exist "$target_dir/$(basename $src_file_path)"
+    assert_file_not_exist "$target_dir/$filename"
+    create_file "$target_dir/test/$filename"
+    echo "old_file" >"$target_dir/test/$filename"
+    echo "new_file" >"$src_file_path"
+    mkdir "/tmp/mounted_target"
+    sudo mount --bind "/tmp/mounted_target" "$target_dir"
+    assert_dir_not_exist "$target_dir/test"
 
-    cmd_set set_file_via_tmp_mount_directory "$src_file_path" "$target_dir" ''
+    cmd_set set_file_via_tmp_mount_directory "$src_file_path" "$target_dir/test" ''
+
 
     assert_dir_not_exist "$mounted_dir"
-    assert_file_exist "$target_dir/$(basename $src_file_path)"
+    sudo umount "$target_dir"
+    assert_file_exist "$target_dir/test/$filename"
+    assert_equal "$(cat $target_dir/test/$filename)" 'new_file'
 
+}
+
+@test "find first mountpoint from path" {
+  # Given
+  mkdir -p "$mounted_dir"
+  sudo mount --bind "$target_dir" "$mounted_dir"
+  local subfolder="test/testi/testo"
+  mkdir -p "$mounted_dir/$subfolder"
+
+  # When
+  actual_found=$(cmd_set find_first_mountpoint "$mounted_dir/$subfolder")
+
+  # Then
+  assert_equal "$actual_found" "$mounted_dir"
 }
 
 @test "test cp with env subst" {

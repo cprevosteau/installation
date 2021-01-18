@@ -23,14 +23,32 @@ set_file_via_tmp_mount_directory() {
     local filepath="$1"
     local target_dir="$2"
     local env_vars_to_be_replaced="$3"
-    local filename
+    local filename already_mounted_dir to_mount_dir
     filename=$(basename "$filepath")
+    already_mounted_dir=$(find_first_mountpoint "$target_dir")
+    to_mount_dir=$(dirname "$already_mounted_dir")
+    target_subdir="${target_dir##$to_mount_dir/}"
     local tmp_dir="/tmp/mounted"
+    local target_mounted_tmp_dir="$tmp_dir/$target_subdir"
     sudo mkdir -p "$tmp_dir"
-    sudo mount --bind "$target_dir" "$tmp_dir"
-    cp_with_env_subst "$filepath" "$tmp_dir" "$env_vars_to_be_replaced"
+    sudo mount --bind "$to_mount_dir" "$tmp_dir"
+    cp_with_env_subst "$filepath" "$target_mounted_tmp_dir" "$env_vars_to_be_replaced"
     sudo umount "$tmp_dir"
     sudo rm -rf "$tmp_dir"
+}
+
+find_first_mountpoint() {
+  filepath="$1"
+  path_to_test="$filepath"
+  while ! mountpoint -q "$path_to_test"
+  do
+    path_to_test=$(dirname "$path_to_test")
+  done
+  if [ "$path_to_test" != '/' ]; then
+    echo "$path_to_test"
+  else
+    echo "$filepath"
+  fi
 }
 
 cp_with_env_subst() {

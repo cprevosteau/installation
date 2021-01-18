@@ -21,7 +21,7 @@ echo "Decrypt partition"
 echo "Password:"
 read -s password
 echo "$password" | sudo -S echo "Password set"
-is_decrypted || sudo unlock -b /dev/nvme0n1p8
+is_decrypted || sudo udisksctl unlock -b /dev/nvme0n1p8
 is_a_mount_point "$ENCRYPTED_DIR" || sudo mount -t auto "$decrypted_partition_path" "$ENCRYPTED_DIR"
 is_a_mount_point "/tmp" || sudo mount --bind "$SYSTEM_DIR/tmp" /tmp
 is_swap_file_in_use "$swap_file" || sudo swapon "$ENCRYPTED_DIR/swapfile"
