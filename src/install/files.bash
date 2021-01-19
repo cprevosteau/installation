@@ -27,7 +27,7 @@ set_file_via_tmp_mount_directory() {
     filename=$(basename "$filepath")
     already_mounted_dir=$(find_first_mountpoint "$target_dir")
     to_mount_dir=$(dirname "$already_mounted_dir")
-    target_subdir="${target_dir##$to_mount_dir/}"
+    local target_subdir="${target_dir##$to_mount_dir/}"
     local tmp_dir="/tmp/mounted"
     local target_mounted_tmp_dir="$tmp_dir/$target_subdir"
     sudo mkdir -p "$tmp_dir"

@@ -7,6 +7,8 @@ readonly script_path="$script_dir/$script_name"
 import_src_and_env
 . ../../../src/display/spinner.bash
 
+#trap 'printf "   fail\n" && exit 1' ERR
+
 cleanup_terminal_rgx='\e\[\?12l\e\[\?25h'
 green_mark_rgx='\e\[32m✔\e\[0m'
 red_cross_rgx='\e\[31m❌\e\[0m'
@@ -20,10 +22,11 @@ expected_output_rgx="$exp_line1\n$exp_line2\n\$"
 
 # When
 actual_output=$(spinner "$tested_cmd")
+echo $actual_output
 
 # Then
 (echo "$actual_output" | grep -Pzo "$expected_output_rgx" &>/dev/null && \
- printf "   ok\n") || (printf "   fail\n" && exit 1)
+ printf "   ok\n") || (printf "   fail: actual_output: %s\n" "$actual_output" && exit 1)
 
 
 printf "Test just one func which fails in backtrace \n"
@@ -42,10 +45,11 @@ expected_output_rgx="$exp_line1\n$exp_line2\n\$"
 
 # When
 actual_output=$(spinner "$tested_cmd")
+echo $actual_output
 
 # Then
 (echo "$actual_output" | grep -Pzo "$expected_output_rgx" &>/dev/null && \
- printf "   ok\n") || (printf "   fail\n" && exit 1)
+ printf "   ok\n") || (printf "   fail: actual_output: %s\n" "$actual_output" && exit 1)
 
 
 
@@ -64,6 +68,7 @@ expected_output_rgx="$exp_line1\n$exp_line2\n$exp_line3\n\$"
 
 # When
 actual_output=$(spinner "$tested_cmd")
+echo $actual_output
 
 # Then
 (echo "$actual_output" | grep -Pzo "$expected_output_rgx" &>/dev/null && \
