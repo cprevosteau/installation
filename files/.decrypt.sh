@@ -26,8 +26,8 @@ is_a_mount_point "$ENCRYPTED_DIR" || sudo mount -t auto "$decrypted_partition_pa
 is_a_mount_point "/tmp" || sudo mount --bind "$SYSTEM_DIR/tmp" /tmp
 is_swap_file_in_use "$swap_file" || sudo swapon "$ENCRYPTED_DIR/swapfile"
 is_a_mount_point "$AUTOSTART_DIR" || sudo mount --bind "$SYSTEM_DIR/config/autostart" "$AUTOSTART_DIR"
-is_a_mount_point "$windows_dir" || \
- sudo mount -t cifs \\\\Desktop-j79l5i3\\i "$windows_dir" -o username=clement,password=$password || \
- true
+is_a_mount_point "$windows_dir" \
+ || sudo mount -t cifs \\\\Desktop-j79l5i3\\i "$windows_dir" -o username=clement,password=$password \
+ || true
 busctl --user call org.gnome.Shell /org/gnome/Shell org.gnome.Shell Eval s 'Meta.restart("Restarting…")'
 sudo systemctl restart docker
