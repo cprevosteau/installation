@@ -7,7 +7,8 @@ install_files(){
 }
 
 set_decryption_desktop() {
-    set_file_via_tmp_mount_directory "$FILES_DIR/$DECRYPTION_DESKTOP_FILE" "$AUTOSTART_DIR" '$DECRYPT_FILE'
+    set_file_via_tmp_mount_directory "$FILES_DIR/$DECRYPTION_DESKTOP_FILE" "$AUTOSTART_DIR" \
+     '$HOME $DECRYPT_FILE'
 }
 
 set_bash_aliases() {
@@ -33,6 +34,7 @@ set_file_via_tmp_mount_directory() {
     sudo mkdir -p "$tmp_dir"
     sudo mount --bind "$to_mount_dir" "$tmp_dir"
     cp_with_env_subst "$filepath" "$target_mounted_tmp_dir" "$env_vars_to_be_replaced"
+    sleep 1
     sudo umount "$tmp_dir"
     sudo rm -rf "$tmp_dir"
 }
