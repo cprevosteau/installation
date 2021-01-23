@@ -1,4 +1,5 @@
-FROM encrypted_with_systemd:latest
+ARG VERSION
+FROM encrypted:systemd-$VERSION
 SHELL ["/bin/bash", "-c"]
 RUN source "$TESTS_DIR/../src/utils/import_src_and_env.bash" && import_src_and_env && \
     load install/docker.bash && \

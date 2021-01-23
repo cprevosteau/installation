@@ -1,21 +1,30 @@
 include env/.env*
 export
 SHELL := /bin/bash
+IMAGE-DOCKER-VERSION=1.0
 
 add_test_src_to_bashrc:
 	echo ". ${INSTALLATION_DIR}/tests/test_src.bash" >> "${BASHRC_FILEPATH}"
 
 build_docker:
-	docker build -t encrypted:latest --build-arg TESTS_DIR=${TESTS_DIR} --build-arg USER=${USER} .
+	docker build -t encrypted:${IMAGE-DOCKER-VERSION} --build-arg TESTS_DIR=${TESTS_DIR} --build-arg USER=${USER} .
+	docker tag encrypted cloud.canister.io:5000/cprevosteau/encrypted
+
 
 build_docker_with_java:
-	docker build -t encrypted_with_java:latest -f dockers/encrypted_with_java.Dockerfile .
+	docker build -t encrypted:java-${IMAGE-DOCKER-VERSION} -f dockers/encrypted_with_java.Dockerfile .
+	docker tag encrypted:java-${IMAGE-DOCKER-VERSION}  cloud.canister.io:5000/cprevosteau/encrypted:java-${IMAGE-DOCKER-VERSION}
+	docker push cloud.canister.io:5000/cprevosteau/encrypted:java-${IMAGE-DOCKER-VERSION}
 
 build_docker_with_systemd:
-	docker build -t encrypted_with_systemd:latest -f dockers/encrypted_with_systemd.Dockerfile .
+	docker build -t encrypted:systemd-${IMAGE-DOCKER-VERSION} -f dockers/encrypted_with_systemd.Dockerfile .
+	docker tag encrypted:systemd-${IMAGE-DOCKER-VERSION}  cloud.canister.io:5000/cprevosteau/encrypted:systemd-${IMAGE-DOCKER-VERSION}
+	docker push cloud.canister.io:5000/cprevosteau/encrypted:systemd-${IMAGE-DOCKER-VERSION}
 
 build_docker_with_docker:
-	docker build -t encrypted_with_docker:latest -f dockers/encrypted_with_docker.Dockerfile .
+	docker build -t encrypted:docker-${IMAGE-DOCKER-VERSION}  -f dockers/encrypted_with_docker.Dockerfile --build-arg VERSION=${IMAGE-DOCKER-VERSION} .
+	docker tag encrypted:docker-${IMAGE-DOCKER-VERSION}  cloud.canister.io:5000/cprevosteau/encrypted:docker-${IMAGE-DOCKER-VERSION}
+	docker push cloud.canister.io:5000/cprevosteau/encrypted:docker-${IMAGE-DOCKER-VERSION}
 
 build_dockers:
 	make build_docker
@@ -84,3 +93,5 @@ install_sysbox:
 	docker rm $(shell docker ps -a -q) -f || true
 	sudo apt-get install ./sysbox_0.2.1-0.ubuntu-focal_amd64.deb -y && rm sysbox_0.2.1-0.ubuntu-focal_amd64.deb
 
+login_to_docker_repo:
+	docker login --username=cprevosteau cloud.canister.io:5000
