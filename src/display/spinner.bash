@@ -3,15 +3,17 @@ include utils/decorators.bash
 include display/fd.bash
 include display/spin.bash
 include display/backtrace.bash
-include logger/logger.bash
+include display/logger.bash
 #    local spin="🕐"
 #    local spin="🌚🌘🌗🌖🌒🌝"
 
 spinner() {
-    local cmd_arr=( "$@" )
+    local log_file="$1"
+    local package="$2"
+    local cmd_arr=( "${@:3}" )
     local msg="${cmd_arr[*]}"
     local fd_number=3
-    spin "$msg" &
+    spin "$msg" "$log_file" &
     local spin_pid=$!
     set_backtrace "$spin_pid" "$msg" "$fd_number"
     open_fd "$fd_number"
@@ -19,6 +21,8 @@ spinner() {
     exit_code="$?"
     if [ "$exit_code" = 0 ]; then
         stop_spin_on_success $spin_pid "${cmd_arr[*]}"
+    else
+        print_log "$log_file" "$package"
     fi
     cleanup_backtrace
     close_fd "$fd_number"

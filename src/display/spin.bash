@@ -39,15 +39,18 @@ get_frame(){
 
 spin()
 {
-    local cmd_arr=( "$@" )
+    local msg="$1"
+    local log_file="$2"
     local color="37"
     tput civis
     local i=1
     while :
     do
+        local last_line_log="$(tail -n 1 "$log_file" 2>/dev/null)"
         local frame="$( get_frame "$i")"
         cursor_back
-        printf "$(set_color $color)%s$(reset_color) %s $(delete_end_of_line)" "$frame" "${cmd_arr[*]}"
+        printf "$(set_color $color)%s$(reset_color) %s: %s $(delete_end_of_line)" \
+            "$frame" "$msg" "$last_line_log"
         sleep .1
         i=$((i + 1))
     done
@@ -76,7 +79,7 @@ stop_spin_on_success() {
     local green_check_mark="\033[32m✔\033[0m"
     kill -9 "$spin_pid"
     cursor_back
-    printf "%b  %s" "$green_check_mark" "$msg"
+    printf "%b  %s $(delete_end_of_line)" "$green_check_mark" "$msg"
     cleanup_terminal
 }
 
@@ -92,6 +95,6 @@ stop_spin_on_fail() {
     local red_cross="\033[31m❌\033[0m"
     kill -9 "$spin_pid"
     cursor_back
-    printf "%b  %s" "$red_cross" "$msg"
+    printf "%b  %s $(delete_end_of_line)" "$red_cross" "$msg"
     cleanup_terminal
 }

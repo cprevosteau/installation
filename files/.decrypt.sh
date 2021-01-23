@@ -6,7 +6,7 @@ windows_dir="/home/clement/windows"
 swap_file="$ENCRYPTED_DIR/swapfile"
 
 is_decrypted() {
-  ls "$decrypted_partition_path" >/dev/null && echo "The partition is already decrypted."
+  ls "$decrypted_partition_path" &>/dev/null && echo "The partition is already decrypted."
 }
 is_a_mount_point() {
   local mountpoint_path="$1"
@@ -27,7 +27,7 @@ is_a_mount_point "/tmp" || sudo mount --bind "$SYSTEM_DIR/tmp" /tmp
 is_swap_file_in_use "$swap_file" || sudo swapon "$ENCRYPTED_DIR/swapfile"
 is_a_mount_point "$AUTOSTART_DIR" || sudo mount --bind "$SYSTEM_DIR/config/autostart" "$AUTOSTART_DIR"
 is_a_mount_point "$windows_dir" \
- || sudo mount -t cifs \\\\Desktop-j79l5i3\\i "$windows_dir" -o username=clement,password="$password" \
+ || sudo mount -t cifs \\\\Desktop-j79l5i3\\i "$windows_dir" -o username=clement,password="$password" 2>/dev/null\
  || true
 busctl --user call org.gnome.Shell /org/gnome/Shell org.gnome.Shell Eval s 'Meta.restart("Restarting…")'
 sudo systemctl restart docker
