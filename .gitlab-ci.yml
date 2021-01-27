@@ -1,0 +1,10 @@
+stages:
+  - test
+
+test_with_docker:
+  stage: test
+  image: "docker:latest"
+  services:
+    - docker:dind
+  script:
+    - make tests_in_docker

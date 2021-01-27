@@ -14,7 +14,7 @@
 # This will run systemd and prompt for a user login; the default user/password
 # in this image is "admin/admin".
 
-FROM encrypted:latest
+FROM registry.gitlab.com/cprevosteau/installation/encrypted
 
 #
 # Systemd installation

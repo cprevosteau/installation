@@ -1,36 +1,31 @@
 include env/.env*
 export
 SHELL := /bin/bash
-IMAGE-DOCKER-VERSION=1.0
+SUPPORTED_COMMANDS := build_docker_with
+SUPPORTS_MAKE_ARGS := $(findstring $(firstword $(MAKECMDGOALS)), $(SUPPORTED_COMMANDS))
+ifneq "$(SUPPORTS_MAKE_ARGS)" ""
+  COMMAND_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  $(eval $(COMMAND_ARGS):;@:)
+endif
+ENCRYPTED_IMAGE := registry.gitlab.com/cprevosteau/installation/encrypted
 
 add_test_src_to_bashrc:
 	echo ". ${INSTALLATION_DIR}/tests/test_src.bash" >> "${BASHRC_FILEPATH}"
 
 build_docker:
-	docker build -t encrypted:${IMAGE-DOCKER-VERSION} --build-arg TESTS_DIR=${TESTS_DIR} --build-arg USER=${USER} .
-	docker tag encrypted cloud.canister.io:5000/cprevosteau/encrypted
+	docker build -t registry.gitlab.com/cprevosteau/installation/encrypted --build-arg TESTS_DIR=${TESTS_DIR} --build-arg USER=${USER} .
+	docker push registry.gitlab.com/cprevosteau/installation/encrypted
 
-
-build_docker_with_java:
-	docker build -t encrypted:java-${IMAGE-DOCKER-VERSION} -f dockers/encrypted_with_java.Dockerfile .
-	docker tag encrypted:java-${IMAGE-DOCKER-VERSION}  cloud.canister.io:5000/cprevosteau/encrypted:java-${IMAGE-DOCKER-VERSION}
-	docker push cloud.canister.io:5000/cprevosteau/encrypted:java-${IMAGE-DOCKER-VERSION}
-
-build_docker_with_systemd:
-	docker build -t encrypted:systemd-${IMAGE-DOCKER-VERSION} -f dockers/encrypted_with_systemd.Dockerfile .
-	docker tag encrypted:systemd-${IMAGE-DOCKER-VERSION}  cloud.canister.io:5000/cprevosteau/encrypted:systemd-${IMAGE-DOCKER-VERSION}
-	docker push cloud.canister.io:5000/cprevosteau/encrypted:systemd-${IMAGE-DOCKER-VERSION}
-
-build_docker_with_docker:
-	docker build -t encrypted:docker-${IMAGE-DOCKER-VERSION}  -f dockers/encrypted_with_docker.Dockerfile --build-arg VERSION=${IMAGE-DOCKER-VERSION} .
-	docker tag encrypted:docker-${IMAGE-DOCKER-VERSION}  cloud.canister.io:5000/cprevosteau/encrypted:docker-${IMAGE-DOCKER-VERSION}
-	docker push cloud.canister.io:5000/cprevosteau/encrypted:docker-${IMAGE-DOCKER-VERSION}
+build_docker_with:
+	# COMMAND_ARGS is java, docker or systemd
+	docker build -t registry.gitlab.com/cprevosteau/installation/encrypted/$(COMMAND_ARGS) -f dockers/encrypted_with_$(COMMAND_ARGS).Dockerfile .
+	docker push registry.gitlab.com/cprevosteau/installation/encrypted/$(COMMAND_ARGS)
 
 build_dockers:
 	make build_docker
-	make build_docker_with_java
-	make build_docker_with_systemd
-	make build_docker_with_docker
+	make build_docker_with java
+	make build_docker_with systemd
+	make build_docker_with docker
 
 set_normal_data_root:
 	source "src/utils/import_src_and_env.bash" && import_src_and_env \
@@ -44,17 +39,16 @@ run_systemd_docker:
 	make test_real_install_docker
 
 get_into_docker:
-	docker run -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" -v "${DATA_DIR}:${DATA_DIR}" encrypted:latest bash -i
+	docker run -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" -v "${DATA_DIR}:${DATA_DIR}" $(ENCRYPTED_IMAGE) bash -i
 
 get_into_last_docker:
 	docker start -a -i `docker ps -q -l`
 
 tests_in_docker:
-	docker run --privileged -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" encrypted:latest
-	docker run -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" encrypted:latest bats -r "${TESTS_DIR}/test_helpers/helpers"
+	docker run --privileged -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" $(ENCRYPTED_IMAGE)
 
 tests_in_docker_tap:
-	docker run -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" encrypted:latest bats -r --tap "${TESTS_DIR}/src"
+	docker run -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" $(ENCRYPTED_IMAGE) bats -r --tap "${TESTS_DIR}/src"
 
 install_bats_and_add_ons:
 	git submodule add https://github.com/bats-core/bats-support tests/test_helpers/bats-support
@@ -62,7 +56,7 @@ install_bats_and_add_ons:
 	git submodule add https://github.com/bats-core/bats-file tests/test_helpers/bats-file
 
 test_helpers:
-	docker run -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" encrypted:latest bats -r "${TESTS_DIR}/test_helpers/helpers"
+	docker run -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" $(ENCRYPTED_IMAGE) bats -r "${TESTS_DIR}/test_helpers/helpers"
 
 test_real_install_docker:
 	make set_normal_data_root
@@ -94,4 +88,4 @@ install_sysbox:
 	sudo apt-get install ./sysbox_0.2.1-0.ubuntu-focal_amd64.deb -y && rm sysbox_0.2.1-0.ubuntu-focal_amd64.deb
 
 login_to_docker_repo:
-	docker login --username=cprevosteau cloud.canister.io:5000
+	pass Perso/Gitlab | docker login --username=cprevosteau --password-stdin registry.gitlab.com

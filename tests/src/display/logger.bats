@@ -84,7 +84,7 @@ EOF
 12-01-2021 12:38:45 [INFO] package1: Koujou
 12-01-2021 12:38:45 [ERROR] package1: Koujou
 12-01-2021 12:38:45 [INFO] package1: Koujou
-All the log is available here: $log_file
+The complete log is available here: $log_file
 EOF
 )
     local package="package1"

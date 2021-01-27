@@ -1,11 +1,12 @@
 ##!/usr/bin/env bash
 include utils/move_to_system.bash
 
-config_system() {
+install_system() {
   local -r original_dirs=(
     ".cache"
     "Downloads"
     ".ssh"
+    ".gnupg"
   )
   for directory in "${original_dirs[@]}"
   do

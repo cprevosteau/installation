@@ -45,6 +45,6 @@ teardown() {
     assert_success
     assert_file_not_exist "/tmp/miniconda_installer.sh"
     assert_equal "${lines[0]}" "config_miniconda"
-    assert_equal "${lines[1]}"  "conda install -y -c conda-forge jupyterlab"
+    assert_equal "${lines[1]}"  "conda install -y -c conda-forge jupyterlab jupytext"
 }
 
