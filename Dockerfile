@@ -17,6 +17,7 @@ RUN set -a; . "./$ENV_REQUIRED"; set +a &&\
     envsubst <"$ENV_REQUIRED" | grep _DIR | sed -e "s/.*=//" | xargs -L 2 mkdir -p &&\
     chown $USER $DATA_DIR &&\
     sudo rm "$ENV_REQUIRED"
+VOLUME /home/clement/encrypted/installation/data
 ARG TESTS_DIR
 ENV TESTS_DIR=$TESTS_DIR
 WORKDIR $HOME
