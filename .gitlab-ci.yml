@@ -7,6 +7,6 @@ test_with_docker:
   services:
     - docker:dind
   before_script:
-    - apt-get -y install make
+    - apk add make
   script:
     - make tests_in_docker
