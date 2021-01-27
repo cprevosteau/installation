@@ -1,6 +1,7 @@
 include env/.env*
 export
 SHELL := /bin/bash
+CURRENT_DIR := $(shell pwd)
 SUPPORTED_COMMANDS := build_docker_with
 SUPPORTS_MAKE_ARGS := $(findstring $(firstword $(MAKECMDGOALS)), $(SUPPORTED_COMMANDS))
 ifneq "$(SUPPORTS_MAKE_ARGS)" ""
@@ -45,10 +46,10 @@ get_into_last_docker:
 	docker start -a -i `docker ps -q -l`
 
 tests_in_docker:
-	docker run --privileged -v "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" $(ENCRYPTED_IMAGE)
+	docker run --privileged -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" $(ENCRYPTED_IMAGE)
 
 tests_in_docker_tap:
-	docker run -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" $(ENCRYPTED_IMAGE) bats -r --tap "${TESTS_DIR}/src"
+	docker run -itv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" $(ENCRYPTED_IMAGE) bats -r --tap "${TESTS_DIR}/src"
 
 install_bats_and_add_ons:
 	git submodule add https://github.com/bats-core/bats-support tests/test_helpers/bats-support
