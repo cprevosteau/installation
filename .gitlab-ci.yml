@@ -12,5 +12,6 @@ test_with_docker:
     - docker:dind
   before_script:
     - apk add make bash
+    - mkdir data
   script:
     - make tests_in_docker
