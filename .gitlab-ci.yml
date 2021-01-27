@@ -7,6 +7,6 @@ test_with_docker:
   services:
     - docker:dind
   before_script:
-    - apk add make
+    - apk add make bash
   script:
     - make tests_in_docker
