@@ -26,17 +26,17 @@ mock_download_func_to_use_stored_data() {
 		local data_path="$DATA_DIR/$file"
 		if [ $output_mode = "file" ]; then
 		    if [ -f "$data_path" ]; then
-                cp "$data_path" "$output_path"
-            else
-                eval "_$download_func_name $*"
-                cp "$output_path" "$data_path"
-            fi
+            cp "$data_path" "$output_path"
         else
-		    if [ ! -f "$data_path" ]; then
-		        eval "_$download_func_name $*" > "$data_path"
-            fi
-            cat "$data_path"
+            eval "_$download_func_name $*"
+            cp "$output_path" "$data_path"
         fi
+    else
+        if [ ! -f "$data_path" ]; then
+            eval "_$download_func_name $*" > "$data_path"
+        fi
+        cat "$data_path"
+    fi
 	}
 	save_function mocked_func "$download_func_name" "download_func_name=$download_func_name" && unset -f mocked_func
 }
