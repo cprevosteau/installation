@@ -23,7 +23,7 @@ test_real_installs:
     - docker:dind
   before_script:
     - apk add make bash
-    - mkdir data && chown clement data
+    - mkdir data
   script:
     - make test_real_installs
 
