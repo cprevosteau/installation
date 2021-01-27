@@ -1,6 +1,10 @@
 stages:
   - test
 
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+
 test_with_docker:
   stage: test
   image: "docker:latest"
