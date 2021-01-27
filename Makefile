@@ -45,7 +45,7 @@ get_into_last_docker:
 	docker start -a -i `docker ps -q -l`
 
 tests_in_docker:
-	docker run --privileged -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" $(ENCRYPTED_IMAGE)
+	docker run --privileged -v "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" $(ENCRYPTED_IMAGE)
 
 tests_in_docker_tap:
 	docker run -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" $(ENCRYPTED_IMAGE) bats -r --tap "${TESTS_DIR}/src"
