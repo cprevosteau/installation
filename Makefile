@@ -2,7 +2,7 @@ include env/.env*
 export
 SHELL := /bin/bash
 CURRENT_DIR := $(shell pwd)
-SUPPORTED_COMMANDS := build_docker_with
+SUPPORTED_COMMANDS := build_docker_with test_real_install
 SUPPORTS_MAKE_ARGS := $(findstring $(firstword $(MAKECMDGOALS)), $(SUPPORTED_COMMANDS))
 ifneq "$(SUPPORTS_MAKE_ARGS)" ""
   COMMAND_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
@@ -80,7 +80,20 @@ test_set_data_root_directory:
 	docker exec -tiu clement docker bats "${TESTS_DIR}/real_install/set_data_root_directory.bats" --tap
 
 test_real_install_biglybt:
-	docker run -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" -v "${DATA_DIR}:${DATA_DIR}" encrypted_with_java:latest bats "${TESTS_DIR}/real_install/biglybt.bats" --tap
+	docker run -itv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" -v "${DATA_DIR}:${DATA_DIR}" $(ENCRYPTED_IMAGE)/java bats "${TESTS_DIR}/real_install/biglybt.bats"
+
+test_real_install:
+	docker run -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" -v "${DATA_DIR}:${DATA_DIR}" $(ENCRYPTED_IMAGE) bats "${TESTS_DIR}/real_install/${COMMAND_ARGS}.bats"
+
+test_real_installs:
+	make test_real_install bats
+	make test_real_install google_chrome
+	make test_real_install intellij_pycharm
+	make test_real_install miniconda
+	make test_real_install poetry
+	make test_real_install pyenv
+	make test_real_install slack
+	make test_real_install java
 
 install_sysbox:
 	wget -c https://github.com/nestybox/sysbox/releases/download/v0.2.1/sysbox_0.2.1-0.ubuntu-focal_amd64.deb
