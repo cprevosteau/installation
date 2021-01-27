@@ -3,8 +3,6 @@ stages:
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
-  DOCKER_TLS_CERTDIR: ""
-
 
 test_with_docker:
   stage: test

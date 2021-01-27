@@ -92,4 +92,4 @@ login_to_docker_repo:
 	pass Perso/Gitlab | docker login --username=cprevosteau --password-stdin registry.gitlab.com
 
 test_ci_cd:
-	sudo gitlab-runner exec docker test_with_docker --docker-privileged --docker-volumes "${HOME}/.ssh/id_cp:/root/.ssh/id_cp:ro"
+	sudo gitlab-runner exec docker test_with_docker --docker-privileged
