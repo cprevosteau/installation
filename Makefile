@@ -83,8 +83,10 @@ test_real_install_biglybt:
 	docker run -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" -v "${DATA_DIR}:${DATA_DIR}" $(ENCRYPTED_IMAGE)/java bats "${TESTS_DIR}/real_install/biglybt.bats"
 
 test_real_install:
-	docker run -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" -v "${DATA_DIR}:${DATA_DIR}" $(ENCRYPTED_IMAGE) bats "${TESTS_DIR}/real_install/${COMMAND_ARGS}.bats"
-
+	docker run -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" -v "${DATA_DIR}:${DATA_DIR}" $(ENCRYPTED_IMAGE) \
+ 		bats "${TESTS_DIR}/real_install/${COMMAND_ARGS}.bats" \
+	  || docker run -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" -v "${DATA_DIR}:${DATA_DIR}" $(ENCRYPTED_IMAGE) \
+          		bats "${TESTS_DIR}/real_install/${COMMAND_ARGS}.bats" --tap
 test_real_installs:
 	make test_real_install bats
 	make test_real_install google_chrome
