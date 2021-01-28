@@ -82,6 +82,9 @@ test_set_data_root_directory:
 test_real_install_biglybt:
 	docker run -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" -v "${DATA_DIR}:${DATA_DIR}" $(ENCRYPTED_IMAGE)/java bats "${TESTS_DIR}/real_install/biglybt.bats"
 
+debug_ci:
+	docker run -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" -v "${DATA_DIR}:${DATA_DIR}" $(ENCRYPTED_IMAGE) ls -al ${INSTALLATION_DIR}
+
 test_real_install:
 	docker run -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" -v "${DATA_DIR}:${DATA_DIR}" $(ENCRYPTED_IMAGE) \
  		bats "${TESTS_DIR}/real_install/${COMMAND_ARGS}.bats" \
