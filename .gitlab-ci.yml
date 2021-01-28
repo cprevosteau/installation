@@ -25,7 +25,7 @@ test_real_installs:
     - apk add make bash
     - adduser clement --disabled-password --no-create-home
     - mkdir data
-    - chown -r clement .
+    - chown -R clement .
   script:
     - make debug_ci
 

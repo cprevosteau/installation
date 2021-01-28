@@ -84,6 +84,8 @@ test_real_install_biglybt:
 
 debug_ci:
 	docker run -tv "${CURRENT_DIR}:${INSTALLATION_DIR}" $(ENCRYPTED_IMAGE) \
+    		 ls -al /home/clement/encrypted/installation
+	docker run -tv "${CURRENT_DIR}:${INSTALLATION_DIR}" $(ENCRYPTED_IMAGE) \
 		 bats "${TESTS_DIR}/real_install/intellij_pycharm.bats" --tap
 
 test_real_install:
