@@ -23,7 +23,9 @@ test_real_installs:
     - docker:dind
   before_script:
     - apk add make bash
+    - adduser clement --disabled-password --no-create-home
     - mkdir data
+    - chown -r clement .
   script:
     - make debug_ci
 
