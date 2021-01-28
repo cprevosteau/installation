@@ -86,9 +86,9 @@ debug_ci:
 	docker run -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" -v "${DATA_DIR}:${DATA_DIR}" $(ENCRYPTED_IMAGE) ls -al ${INSTALLATION_DIR}
 
 test_real_install:
-	docker run -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" -v "${DATA_DIR}:${DATA_DIR}" $(ENCRYPTED_IMAGE) \
+	docker run --privileged -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" -v "${DATA_DIR}:${DATA_DIR}" $(ENCRYPTED_IMAGE) \
  		bats "${TESTS_DIR}/real_install/${COMMAND_ARGS}.bats" \
-	  || docker run -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" -v "${DATA_DIR}:${DATA_DIR}" $(ENCRYPTED_IMAGE) \
+	  || docker run --privileged -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" -v "${DATA_DIR}:${DATA_DIR}" $(ENCRYPTED_IMAGE) \
           		bats "${TESTS_DIR}/real_install/${COMMAND_ARGS}.bats" --tap
 test_real_installs:
 	make test_real_install intellij_pycharm
