@@ -83,7 +83,8 @@ test_real_install_biglybt:
 	docker run -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" -v "${DATA_DIR}:${DATA_DIR}" $(ENCRYPTED_IMAGE)/java bats "${TESTS_DIR}/real_install/biglybt.bats"
 
 debug_ci:
-	docker run -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" -v "${DATA_DIR}:${DATA_DIR}" $(ENCRYPTED_IMAGE) ls -al ${INSTALLATION_DIR}
+	docker run -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" -v "${DATA_DIR}:${DATA_DIR}" $(ENCRYPTED_IMAGE) \
+		chown clement data && ls -al ${INSTALLATION_DIR} && bats "${TESTS_DIR}/real_install/intellij_pycharm.bats" --tap
 
 test_real_install:
 	docker run --privileged -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" -v "${DATA_DIR}:${DATA_DIR}" $(ENCRYPTED_IMAGE) \
