@@ -84,7 +84,7 @@ test_real_install_biglybt:
 
 debug_ci:
 	docker run -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" -v "${DATA_DIR}:${DATA_DIR}" $(ENCRYPTED_IMAGE) \
-		 sudo chown clement data && ls -al ${INSTALLATION_DIR} && bats "${TESTS_DIR}/real_install/intellij_pycharm.bats" --tap
+		 sudo chown clement ${DATA_DIR} && ls -al ${INSTALLATION_DIR} && bats "${TESTS_DIR}/real_install/intellij_pycharm.bats" --tap
 
 test_real_install:
 	docker run --privileged -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" -v "${DATA_DIR}:${DATA_DIR}" $(ENCRYPTED_IMAGE) \
@@ -111,4 +111,4 @@ login_to_docker_repo:
 	pass Perso/Gitlab | docker login --username=cprevosteau --password-stdin registry.gitlab.com
 
 test_ci_cd:
-	sudo gitlab-runner exec docker test_with_docker --docker-privileged
+	sudo gitlab-runner exec docker test_real_installs --docker-privileged
