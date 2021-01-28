@@ -25,7 +25,7 @@ test_real_installs:
     - apk add make bash
     - mkdir data
   script:
-    - make test_real_installs
+    - make debug_ci
 
 test_real_install_biglybt:
   stage: test
