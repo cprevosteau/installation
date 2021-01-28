@@ -36,6 +36,8 @@ test_real_install_biglybt:
     - docker:dind
   before_script:
     - apk add make bash
+    - adduser clement --disabled-password --no-create-home
     - mkdir data
+    - chown -R clement .
   script:
     - make test_real_install_biglybt
