@@ -84,7 +84,7 @@ test_real_install_biglybt:
 
 debug_ci:
 	docker run -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" -v "${CURRENT_DIR}/data:${DATA_DIR}" $(ENCRYPTED_IMAGE) \
-		'ls -al ${INSTALLATION_DIR} && "${TESTS_DIR}/real_install/intellij_pycharm.bats" --tap'
+		 bats "${TESTS_DIR}/real_install/intellij_pycharm.bats" --tap
 
 test_real_install:
 	docker run -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" -v "${CURRENT_DIR}/data:${DATA_DIR}" $(ENCRYPTED_IMAGE) \
