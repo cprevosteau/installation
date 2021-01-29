@@ -11,7 +11,7 @@ tests:
   services:
     - docker:dind
   before_script:
-    - apk add make bash ncurses
+    - apk add make bash
     - mkdir data
   script:
     - make test_not_real
@@ -52,12 +52,3 @@ test_helpers:
     - mkdir data
   script:
     - make test_helpers
-
-test_non_bats:
-  stage: test
-  image: bash
-  before_script:
-    - apk add make
-    - mkdir data
-  script:
-    -

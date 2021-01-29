@@ -45,9 +45,15 @@ get_into_docker:
 get_into_last_docker:
 	docker start -a -i `docker ps -q -l`
 
-test_not_real:
-	bash tests/src/display/test_spinner.bash
+test_non_bats:
+	docker run -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" $(ENCRYPTED_IMAGE) bash "${TESTS_DIR}/src/display/test_spinner.bash"
+
+test_bats:
 	docker run --privileged -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" $(ENCRYPTED_IMAGE)
+
+test_non_real:
+	make test_non_bats
+	make test_bats
 
 tests_in_docker_tap:
 	docker run -itv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" $(ENCRYPTED_IMAGE) bats -r --tap "${TESTS_DIR}/src"
