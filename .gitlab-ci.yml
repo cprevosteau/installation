@@ -14,7 +14,7 @@ tests:
     - apk add make bash
     - mkdir data
   script:
-    - make tests
+    - make test_not_real
 
 test_real_installs:
   stage: test

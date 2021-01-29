@@ -45,7 +45,7 @@ get_into_docker:
 get_into_last_docker:
 	docker start -a -i `docker ps -q -l`
 
-tests:
+test_not_real:
 	bash tests/src/display/test_spinner.bash
 	docker run --privileged -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" $(ENCRYPTED_IMAGE)
 
@@ -114,4 +114,4 @@ login_to_docker_repo:
 	pass Perso/Gitlab | docker login --username=cprevosteau --password-stdin registry.gitlab.com
 
 test_ci_cd:
-	sudo gitlab-runner exec docker test_real_installs --docker-privileged
+	sudo gitlab-runner exec docker tests --docker-privileged
