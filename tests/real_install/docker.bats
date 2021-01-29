@@ -22,4 +22,5 @@ teardown() {
     echo "$actual_data_root $SYSTEM_DIR/docker" >&3
     assert_equal "$actual_data_root" "$SYSTEM_DIR/docker"
     sudo runuser -l "$USER" -c "docker run hello-world"
+    check_docker
 }

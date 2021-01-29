@@ -2,7 +2,7 @@ FROM ubuntu:20.04
 ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone &&\
     apt-get update &&\
-    DEBIAN_FRONTEND=noninteractive apt-get install -y bats gettext-base git jq keyboard-configuration rsync sudo tzdata wget
+    DEBIAN_FRONTEND=noninteractive apt-get install -y bats gettext-base git jq keyboard-configuration rsync sudo tzdata wget gnome-session gdm3
 ARG USER
 ENV USER=$USER
 RUN useradd -ms /bin/bash $USER &&\

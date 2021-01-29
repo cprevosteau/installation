@@ -24,4 +24,5 @@ teardown() {
     assert_dir_exist "$APP_DIR/biglybt"
     assert_file_exist "$APP_DIR/biglybt/biglybt"
     assert_file_not_exist "/tmp/BiglyBT_Installer.sh"
+    check_biglybt
 }

@@ -10,6 +10,11 @@ install_biglybt() {
   move_from_home_to_system .biglybt
 }
 
+check_biglybt() {
+  [[ $(readlink -f "$HOME/.biglybt") = "$SYSTEM_DIR/biglybt" ]]
+  [[ -f "$APP_DIR/biglybt/biglybt" ]]
+}
+
 download_biglybt_installer() {
   local biglybt_installer="$1"
   download_file "https://files.biglybt.com/installer/BiglyBT_Installer.sh" "$biglybt_installer"

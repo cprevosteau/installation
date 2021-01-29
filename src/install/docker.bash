@@ -9,6 +9,14 @@ install_docker() {
   set_data_root_directory "$DOCKER_ROOT_DIR"
 }
 
+check_docker() {
+    command -v docker
+    local actual_data_root
+    actual_data_root=$(sudo docker info 2>/dev/null | grep "Docker Root Dir" | awk '(NR == 1){print $4}')
+    sudo runuser -l "$USER" -c "docker run hello-world" &>/dev/null
+    [[ "$actual_data_root" = "$SYSTEM_DIR/docker" ]]
+}
+
 remove_old_docker_install() {
   echo Remove old docker and install dependencies
   sudo apt-get remove docker docker-engine docker.io containerd runc

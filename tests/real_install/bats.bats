@@ -18,4 +18,5 @@ teardown() {
     command -v bats
     assert_dir_exist "${APP_DIR}/bats-core"
     assert_file_exist "${bats_file}"
+    check_bats
 }

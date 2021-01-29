@@ -5,3 +5,7 @@ install_bats() {
   cd "${APP_DIR}/bats-core" || exit
   sudo ./install.sh /usr/local
 }
+
+check_bats() {
+  command -v bats
+}

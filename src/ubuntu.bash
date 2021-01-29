@@ -1,3 +1,6 @@
 ##!/usr/bin/env bash
-echo -en "\033[$1D"
+include display/spinner.bash
+include install/*.bash
+
+
 

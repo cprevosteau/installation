@@ -1,6 +1,6 @@
 ##!/usr/bin/env bash
 
-set_explorer(){
+install_explorer(){
   add_folders_to_bookmark "${ENCRYPTED}" "/"
   set_show_hidden_files
   set_dark_theme

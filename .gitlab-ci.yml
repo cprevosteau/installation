@@ -5,7 +5,7 @@ variables:
   GIT_SUBMODULE_STRATEGY: recursive
   DOCKER_TLS_CERTDIR: "" # For use of a local runner
 
-tests:
+test_non_real:
   stage: test
   image: "docker:latest"
   services:
