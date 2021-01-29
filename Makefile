@@ -45,7 +45,8 @@ get_into_docker:
 get_into_last_docker:
 	docker start -a -i `docker ps -q -l`
 
-tests_in_docker:
+tests:
+	bash tests/src/display/test_spinner.bash
 	docker run --privileged -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" $(ENCRYPTED_IMAGE)
 
 tests_in_docker_tap:
@@ -57,7 +58,7 @@ install_bats_and_add_ons:
 	git submodule add https://github.com/bats-core/bats-file tests/test_helpers/bats-file
 
 test_helpers:
-	docker run -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" $(ENCRYPTED_IMAGE) bats -r "${TESTS_DIR}/test_helpers/helpers"
+	docker run -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" $(ENCRYPTED_IMAGE) bats -r "${TESTS_DIR}/test_helpers/helpers"
 
 test_real_install_docker:
 	make set_normal_data_root

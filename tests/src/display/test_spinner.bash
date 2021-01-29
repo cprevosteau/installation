@@ -3,9 +3,9 @@ readonly script_name=$(basename "${0}")
 readonly script_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 readonly script_path="$script_dir/$script_name"
 
-. ../../../src/utils/import_src_and_env.bash
+. $script_dir/../../../src/utils/import_src_and_env.bash
 import_src_and_env
-. ../../../src/display/spinner.bash
+. $script_dir/../../../src/display/spinner.bash
 
 #trap 'printf "   fail\n" && exit 1' ERR
 
@@ -30,7 +30,6 @@ expected_output_rgx="$exp_line1\n$exp_line2\n\$"
 
 # When
 actual_output=$(spinner "$log_file" "$package" "$tested_cmd")
-echo $actual_output
 
 # Then
 (echo "$actual_output" | grep -Pzo "$expected_output_rgx" &>/dev/null && \
@@ -53,13 +52,11 @@ boom() {
 }
 tested_cmd="func"
 exp_line1="$red_cross_rgx  $tested_cmd $delete_end_line_rgx"
-exp_line2="$cleanup_terminal_rgx  called from: func\(\), $script_path, line [0-9]+"
-expected_output_rgx="$exp_line1\n$exp_line2\n\$"
+exp_line2="$cleanup_terminal_rgx  called from: func\(\), .*$script_name, line [0-9]+"
+expected_output_rgx="$exp_line1\n$exp_line2\n"
 
 # When
 actual_output=$(spinner "$log_file" "$package" "$tested_cmd")
-echo $actual_output
-
 
 # Then
 (echo "$actual_output" | grep -Pzo "$expected_output_rgx" &>/dev/null && \
@@ -78,13 +75,12 @@ func2() {
 
 tested_cmd="func2"
 exp_line1="$red_cross_rgx  $tested_cmd $delete_end_line_rgx"
-exp_line2="$cleanup_terminal_rgx  called from: func\(\), $script_path, line [0-9]+"
-exp_line3="  called from: func2\(\), $script_path, line [0-9]+"
-expected_output_rgx="$exp_line1\n$exp_line2\n$exp_line3\n\$"
+exp_line2="$cleanup_terminal_rgx  called from: func\(\), .*$script_name, line [0-9]+"
+exp_line3="  called from: func2\(\), .*$script_name, line [0-9]+"
+expected_output_rgx="$exp_line1\n$exp_line2\n$exp_line3\n"
 
 # When
 actual_output=$(spinner "$log_file" "$package" "$tested_cmd")
-echo $actual_output
 
 # Then
 (echo "$actual_output" | grep -Pzo "$expected_output_rgx" &>/dev/null && \

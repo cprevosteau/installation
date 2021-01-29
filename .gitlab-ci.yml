@@ -5,7 +5,7 @@ variables:
   GIT_SUBMODULE_STRATEGY: recursive
   DOCKER_TLS_CERTDIR: "" # For use of a local runner
 
-test_with_docker:
+tests:
   stage: test
   image: "docker:latest"
   services:
@@ -14,7 +14,7 @@ test_with_docker:
     - apk add make bash
     - mkdir data
   script:
-    - make tests_in_docker
+    - make tests
 
 test_real_installs:
   stage: test
@@ -41,3 +41,23 @@ test_real_install_biglybt:
     - chown -R clement .
   script:
     - make test_real_install_biglybt
+
+test_helpers:
+  stage: test
+  image: "docker:latest"
+  services:
+    - docker:dind
+  before_script:
+    - apk add make bash
+    - mkdir data
+  script:
+    - make test_helpers
+
+test_non_bats:
+  stage: test
+  image: bash
+  before_script:
+    - apk add make
+    - mkdir data
+  script:
+    -
