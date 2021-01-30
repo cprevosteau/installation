@@ -2,7 +2,7 @@ include env/.env*
 export
 SHELL := /bin/bash
 CURRENT_DIR := $(shell pwd)
-SUPPORTED_COMMANDS := build_docker_with test_real_install
+SUPPORTED_COMMANDS := build_docker_with test_real_install test_ci_cd get_into_docker
 SUPPORTS_MAKE_ARGS := $(findstring $(firstword $(MAKECMDGOALS)), $(SUPPORTED_COMMANDS))
 ifneq "$(SUPPORTS_MAKE_ARGS)" ""
   COMMAND_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
@@ -40,7 +40,7 @@ run_systemd_docker:
 	make test_real_install_docker
 
 get_into_docker:
-	docker run -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" -v "${DATA_DIR}:${DATA_DIR}" $(ENCRYPTED_IMAGE) bash -i
+	docker run -itv "${INSTALLATION_DIR}:${INSTALLATION_DIR}:ro" -v "${DATA_DIR}:${DATA_DIR}" $(ENCRYPTED_IMAGE)$(COMMAND_ARGS) bash -i
 
 get_into_last_docker:
 	docker start -a -i `docker ps -q -l`
@@ -87,7 +87,7 @@ test_set_data_root_directory:
 	docker exec -tiu clement docker bats "${TESTS_DIR}/real_install/set_data_root_directory.bats" --tap
 
 test_real_install_biglybt:
-	docker run -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" -v "${CURRENT_DIR}/data:${DATA_DIR}" \
+	docker run -itv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" -v "${CURRENT_DIR}/data:${DATA_DIR}" \
 		$(ENCRYPTED_IMAGE)/java bats "${TESTS_DIR}/real_install/biglybt.bats" --tap
 
 debug_ci:
@@ -121,4 +121,4 @@ login_to_docker_repo:
 	pass Perso/Gitlab | docker login --username=cprevosteau --password-stdin registry.gitlab.com
 
 test_ci_cd:
-	sudo gitlab-runner exec docker tests --docker-privileged
+	sudo gitlab-runner exec docker $(COMMAND_ARGS) --docker-privileged

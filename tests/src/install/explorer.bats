@@ -5,9 +5,7 @@ load_src install/explorer
 setup() {
     # executed before each test
     echo "setup" >&3
-    gtk3_folder="${HOME}/.config/gtk-3.0"
-    mkdir -p "${gtk3_folder}"
-    bookmark_file="${gtk3_folder}/bookmarks"
+    bookmark_file="$GTK3_CONFIG_DIR/bookmarks"
     cat <<EOF >"${bookmark_file}"
 file:///home/clement
 file;///home/clement/Downloads
@@ -17,7 +15,6 @@ EOF
 teardown() {
     # executed after each test
     echo "teardown" >&3
-    rm -r "${gtk3_folder}"
 }
 
 @test "add_folders_to_bookmark" {

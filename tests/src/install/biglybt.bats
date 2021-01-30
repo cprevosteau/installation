@@ -12,6 +12,9 @@ teardown() {
     # executed after each test
     echo "teardown" >&3
     [ ! -e "${tmp_biglybt_installer}" ] || rm "${tmp_biglybt_installer}"
+    if command -v expect; then
+      sudo apt remove -y expect
+    fi
 }
 
 @test "Is link for biglybt installer active ?" {
@@ -27,21 +30,14 @@ teardown() {
     assert_equal "$status_code" 200
 }
 
-@test "test install biglybt package" {
-    local expected_output="$APP_DIR/biglybt
-y
-2
-n
-7"
-    echo "while read data; do echo \$data; done" > "$tmp_biglybt_installer"
-    run_set install_biglybt_from_installer_without_display "$tmp_biglybt_installer"
-    assert_success
-    assert_output "$expected_output"
+@test "test install expect" {
+    install_expect
+    command -v expect
 }
 
-@test "test install biglybt package without display" {
-    local DISPLAY="test"
-    echo "echo \$DISPLAY" > "$tmp_biglybt_installer"
-    run_set install_biglybt_from_installer_without_display "$tmp_biglybt_installer"
-    assert_output ""
+@test "install_biglybt_from_installer_without_display" {
+    install_expect
+    local installer="$TEST_DIR/tests/install/biglybt_fake_installer.sh"
+    run install_biglybt_from_installer_without_display "$installer" "app_dir_test"
+    assert_success
 }

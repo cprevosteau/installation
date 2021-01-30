@@ -30,7 +30,9 @@ teardown() {
     spin "$msg" "$log_file" >"$spin_output" &
     local spin_pid=$!
     sleep 1
+    echo before kill
     kill -9 "$spin_pid"
+    echo "$spin_output"
 
     grep -P "$whole_rgx" "$spin_output"
 }
@@ -54,7 +56,9 @@ teardown() {
     sleep 1
     echo "$line_log_2" >> "$log_file"
     sleep 1
+    echo before kill
     kill -9 "$spin_pid"
+    echo "$spin_output"
 
     grep -P "$whole_rgx" "$spin_output"
 }
