@@ -1,10 +1,10 @@
 #!/usr/bin/env bats
 load ../../import_helpers
+load_src install/explorer
 
 setup() {
     # executed before each test
     echo "setup" >&3
-    load_src config/explorer
     gtk3_folder="${HOME}/.config/gtk-3.0"
     mkdir -p "${gtk3_folder}"
     bookmark_file="${gtk3_folder}/bookmarks"
