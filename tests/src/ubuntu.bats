@@ -32,7 +32,7 @@ teardown() {
     options=$(set +o)
     set -e
 
-    assert_output "$LOG_FILE $app install_$app"
+    assert_output "$LOG_FILE $app"
     echo $options | grep 'set +o errexit'
 }
 
