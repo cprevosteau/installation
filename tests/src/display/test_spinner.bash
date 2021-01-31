@@ -15,6 +15,7 @@ red_cross_rgx='\e\[31m❌\e\[0m'
 delete_end_line_rgx='\e\[K'
 log_file=/tmp/test.log
 package='test'
+msg="Testing"
 
 cleanup_test(){
     rm "$log_file" || true
@@ -24,12 +25,12 @@ cleanup_test(){
 printf "Test when function succeed \n"
 # Given
 tested_cmd="echo ok && sleep 2"
-exp_line1="$green_mark_rgx  $tested_cmd $delete_end_line_rgx"
+exp_line1="$green_mark_rgx  $msg $delete_end_line_rgx"
 exp_line2="$cleanup_terminal_rgx"
 expected_output_rgx="$exp_line1\n$exp_line2\n\$"
 
 # When
-actual_output=$(spinner "$log_file" "$package" "$tested_cmd")
+actual_output=$(spinner "$log_file" "$package" "$msg" "$tested_cmd")
 
 # Then
 (echo "$actual_output" | grep -Pzo "$expected_output_rgx" &>/dev/null && \
@@ -51,12 +52,12 @@ boom() {
     return 1
 }
 tested_cmd="func"
-exp_line1="$red_cross_rgx  $tested_cmd $delete_end_line_rgx"
+exp_line1="$red_cross_rgx  $msg $delete_end_line_rgx"
 exp_line2="$cleanup_terminal_rgx  called from: func\(\), .*$script_name, line [0-9]+"
 expected_output_rgx="$exp_line1\n$exp_line2\n"
 
 # When
-actual_output=$(spinner "$log_file" "$package" "$tested_cmd")
+actual_output=$(spinner "$log_file" "$package" "$msg" "$tested_cmd")
 
 # Then
 (echo "$actual_output" | grep -Pzo "$expected_output_rgx" &>/dev/null && \
@@ -74,13 +75,13 @@ func2() {
 }
 
 tested_cmd="func2"
-exp_line1="$red_cross_rgx  $tested_cmd $delete_end_line_rgx"
+exp_line1="$red_cross_rgx  $msg $delete_end_line_rgx"
 exp_line2="$cleanup_terminal_rgx  called from: func\(\), .*$script_name, line [0-9]+"
 exp_line3="  called from: func2\(\), .*$script_name, line [0-9]+"
 expected_output_rgx="$exp_line1\n$exp_line2\n$exp_line3\n"
 
 # When
-actual_output=$(spinner "$log_file" "$package" "$tested_cmd")
+actual_output=$(spinner "$log_file" "$package" "$msg" "$tested_cmd")
 
 # Then
 (echo "$actual_output" | grep -Pzo "$expected_output_rgx" &>/dev/null && \

@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
-load ../../import_helpers
-load_src install/biglybt
+load ../../../import_helpers
+load_src install/biglybt/biglybt
 
 setup() {
     # executed before each test
@@ -37,7 +37,7 @@ teardown() {
 
 @test "install_biglybt_from_installer_without_display" {
     install_expect
-    local installer="$TEST_DIR/tests/install/biglybt_fake_installer.sh"
+    local installer="$TEST_DIR/tests/install/biglybt/biglybt_fake_installer.sh"
     run install_biglybt_from_installer_without_display "$installer" "app_dir_test"
     assert_success
 }

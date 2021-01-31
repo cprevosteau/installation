@@ -24,7 +24,7 @@ download_biglybt_installer() {
 install_biglybt_from_installer_without_display() {
     local biglybt_installer="$1"
     local biglybt_directory="$2"
-    local exp_file="$INSTALLATION_DIR/src/install/config_biglybt.exp"
+    local exp_file="$INSTALLATION_DIR/src/install/biglybt/config_biglybt.exp"
     expect -f "$exp_file" "$biglybt_installer" "$biglybt_directory"
 }
 

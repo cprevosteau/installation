@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 load ../import_helpers
-load_src install/biglybt
+load_src install/biglybt/biglybt
 
 setup() {
     # executed before each test
