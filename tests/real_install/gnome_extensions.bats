@@ -12,8 +12,7 @@ teardown() {
     echo "teardown" >&3
 }
 
-@test "test_name" {
-    sudo apt-get install -y gnupg2
+@test "gnome_extensions" {
     run check_gnome_extensions
     assert_failure
 

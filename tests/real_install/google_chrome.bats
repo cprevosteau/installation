@@ -12,7 +12,7 @@ teardown() {
     echo "teardown" >&3
 }
 
-@test "test_name" {
+@test "google_chrome" {
     run check_google_chrome
     assert_failure
 
