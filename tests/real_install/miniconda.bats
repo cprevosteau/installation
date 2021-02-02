@@ -20,8 +20,9 @@ teardown() {
 
     cmd_set install_miniconda 2>&3
     assert_dir_exist "${MINICONDA_DIR}"
-    command -v jupyter-lab
-    command -v jupytext
+    for package in "$BASE_PACKAGES[@]"; do
+        command -v $package
+    done
     env -i bash -ic "command -v conda"
     check_miniconda
 }

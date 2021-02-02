@@ -46,5 +46,3 @@ set_dark_theme() {
 check_dark_theme() {
     [[ $(gsettings get org.gnome.desktop.interface gtk-theme) == 'Adwaita-dark' ]]
 }
-
-

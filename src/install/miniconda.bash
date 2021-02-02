@@ -1,6 +1,8 @@
 ##!/usr/bin/env bash
 include utils/download.bash
 
+BASE_PACKAGES=( jupyterlab jupytext pre-commit )
+
 install_miniconda() {
     if ! check_miniconda_package; then
         local -r miniconda_tmp_file="/tmp/miniconda_installer.sh"
@@ -34,12 +36,13 @@ check_miniconda_package() {
 }
 
 install_base_python_packages(){
-    conda install -y -c conda-forge jupyterlab jupytext
+    conda install -y -c conda-forge -n base "${BASE_PACKAGES[@]}"
 }
 
 check_install_base_python_packages(){
-    command -v jupyter-lab
-    command -v jupytext
+    for package in "$BASE_PACKAGES[@]"; do
+        command -v $package
+    done
 }
 
 download_miniconda() {

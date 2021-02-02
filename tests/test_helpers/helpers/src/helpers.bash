@@ -70,6 +70,7 @@ add_cmd_to_func_def() {
 
 save_function() {
 	local orig_function_name="$1"
+	local new_function_name="$2"
 	local orig_function
 	orig_function=$(declare -f "$orig_function_name")
 	local new_function_name="$2"

@@ -27,4 +27,3 @@ move_to_system() {
   local -r target_dir="${SYSTEM_DIR}/${not_hidden_directory}"
   move_dir_and_set_symbolic_link "${original_dir}" "${target_dir}" "${cmd_prefix}"
 }
-

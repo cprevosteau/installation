@@ -17,4 +17,3 @@ check_intellij_pycharm() {
 config_intellij_pycharm() {
   move_from_home_to_system ".config/JetBrains"
 }
-

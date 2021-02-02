@@ -47,4 +47,3 @@ teardown() {
     assert_equal "${lines[0]}" "config_miniconda"
     assert_equal "${lines[1]}"  "conda install -y -c conda-forge jupyterlab jupytext"
 }
-
