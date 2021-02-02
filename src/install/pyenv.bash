@@ -22,7 +22,7 @@ install_pyenv_package() {
 }
 
 check_install_pyenv_package() {
-    command -v pyenv
+    bash -ic "command -v pyenv"
     [[ -d "$PYENV_DIR" ]]
 }
 
