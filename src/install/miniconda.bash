@@ -8,7 +8,7 @@ install_miniconda() {
         install_miniconda_package "$miniconda_tmp_file"
         rm "$miniconda_tmp_file"
     fi
-    if ! check_miniconda_config; then
+    if ! check_config_miniconda; then
         config_miniconda
     fi
     if ! check_install_base_python_packages; then
@@ -54,5 +54,5 @@ config_miniconda() {
 }
 
 check_config_miniconda() {
-    env -i bash -ic "command -v conda"
+    env -i bash -ic "command -v conda" &>/dev/null
 }
