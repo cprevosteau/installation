@@ -15,8 +15,13 @@ teardown() {
 }
 
 @test "real installation miniconda" {
+    run check_miniconda
+    assert_failure
+
     cmd_set install_miniconda 2>&3
     assert_dir_exist "${MINICONDA_DIR}"
-    command -v jupyter
+    command -v jupyter-lab
+    command -v jupytext
     env -i bash -ic "command -v conda"
+    check_miniconda
 }

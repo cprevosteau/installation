@@ -8,6 +8,12 @@ install_intellij_pycharm(){
   config_intellij_pycharm
 }
 
+check_intellij_pycharm() {
+  [[ $(readlink -f "$HOME/.config/JetBrains") = "$SYSTEM_DIR/config/JetBrains" ]]
+  ls $APP_DIR/pycharm*/bin/pycharm.sh
+  ls $APP_DIR/idea*/bin/idea.sh
+}
+
 config_intellij_pycharm() {
   move_from_home_to_system ".config/JetBrains"
 }

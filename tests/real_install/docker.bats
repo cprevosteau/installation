@@ -14,7 +14,11 @@ teardown() {
 
 @test "test real install docker" {
     assert_dir_not_exist "$SYSTEM_DIR/docker"
+    run check_docker
+    assert_failure
+
     cmd_set install_docker >&3 2>&3
+
     command -v docker
     assert_dir_exist "$SYSTEM_DIR/docker"
     local actual_data_root

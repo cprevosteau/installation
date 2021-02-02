@@ -8,13 +8,21 @@ setup() {
     bookmark_file="$GTK3_CONFIG_DIR/bookmarks"
     cat <<EOF >"${bookmark_file}"
 file:///home/clement
-file;///home/clement/Downloads
+file:///home/clement/Downloads
 EOF
 }
 
 teardown() {
     # executed after each test
     echo "teardown" >&3
+}
+
+@test "check_bookmark" {
+    run check_bookmarks /home/clement /home/clement/Downloads
+    assert_success
+
+    run check_bookmark "/home/clement" "/koujougoujougou"
+    assert_failure
 }
 
 @test "add_folders_to_bookmark" {
@@ -27,7 +35,7 @@ teardown() {
     expecteed_fourth_line="file://${folder2}"
 
     # When
-    run_set add_folders_to_bookmark "${folder1}" "${folder2}"
+    run_set add_folders_to_bookmark "${folder1}" "${folder1}" "${folder2}"
     assert_success
 
     # THen
@@ -38,4 +46,5 @@ teardown() {
     assert_equal "${bookmark_lines}" "${expected_line_number}"
     assert_equal "${third_line}" "${expecteed_third_line}"
     assert_equal "${fourth_line}" "${expecteed_fourth_line}"
+    check_bookmarks "${folder1}" "${folder2}"
 }

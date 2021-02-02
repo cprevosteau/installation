@@ -2,7 +2,20 @@ FROM ubuntu:20.04
 ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone &&\
     apt-get update &&\
-    DEBIAN_FRONTEND=noninteractive apt-get install -y bats gettext-base git jq keyboard-configuration rsync sudo tzdata wget gnome-session gdm3
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+        bats \
+        gdm3 \
+        gettext-base \
+        git \
+        gnupg \
+        gnome-session \
+        jq \
+        keyboard-configuration \
+        rsync \
+        sudo \
+        tzdata \
+        wget
+
 ARG USER
 ENV USER=$USER
 RUN useradd -ms /bin/bash $USER &&\
@@ -16,6 +29,10 @@ COPY env/$ENV_REQUIRED .
 RUN set -a; . "./$ENV_REQUIRED"; set +a &&\
     envsubst <"$ENV_REQUIRED" | grep _DIR | sed -e "s/.*=//" | xargs -L 2 mkdir -p &&\
     sudo rm "$ENV_REQUIRED"
+SHELL ["/bin/bash", "-c"]
+RUN ORIGINAL_DIRS=( ".cache" "Downloads" ".ssh" ".gnupg" ) && \
+    for directory in "${ORIGINAL_DIRS[@]}"; do mkdir -p "$HOME/$directory"; done
+
 ARG TESTS_DIR
 ENV TESTS_DIR=$TESTS_DIR
 WORKDIR $HOME

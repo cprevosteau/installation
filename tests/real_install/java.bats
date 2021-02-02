@@ -21,6 +21,9 @@ teardown() {
 
 @test "install_java" {
     refute [ "$(command -v java)" ]
+    run check_java
+    assert_failure
+
     cmd_set install_java
 
     assert [ "$(command -v java)" ]
@@ -28,4 +31,5 @@ teardown() {
     # shellcheck disable=SC2016
     java_home=$(env -i bash -ic 'echo $JAVA_HOME')
     [ ! "$java_home" = "" ]
+    check_java
 }

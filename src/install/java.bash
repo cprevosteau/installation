@@ -7,6 +7,11 @@ install_java(){
     set_java_home "$java_home"
 }
 
+check_java(){
+    command -v java
+    grep -q 'JAVA_HOME' "$BASHRC_FILEPATH"
+}
+
 install_java_package(){
     sudo apt-get update
     sudo apt-get install -y default-jdk

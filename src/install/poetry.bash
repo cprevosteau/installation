@@ -4,6 +4,10 @@ include utils/download.bash
 install_poetry(){
     download_poetry | install_poetry_package "$POETRY_DIR"
 }
+check_poetry(){
+    [[ -d "$POETRY_DIR" ]]
+    env -i HOME="$HOME" bash -lc "command -v poetry"
+}
 
 download_poetry() {
     local installer_url="https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py"

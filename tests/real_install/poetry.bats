@@ -16,7 +16,11 @@ teardown() {
 @test "real installation miniconda" {
     sudo apt install -y python3.8
     sudo ln -s "$(which python3.8)"  /usr/bin/python
+    run check_poetry
+    assert_failure
+
     cmd_set install_poetry 2>&3
     assert_dir_exist "$POETRY_DIR"
     env -i HOME="$HOME" bash -lc "command -v poetry"
+    check_poetry
 }

@@ -14,6 +14,10 @@ teardown() {
 }
 
 @test "test_slack" {
+    run check_slack
+    assert_failure
+
     cmd_set install_slack 1>&3
     command -v slack
+    check_slack
 }

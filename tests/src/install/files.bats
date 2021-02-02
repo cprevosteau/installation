@@ -20,6 +20,7 @@ teardown() {
     delete_if_directory_exist "$target_dir"
     sudo umount "$mounted_dir" || true
     delete_if_directory_exist "$mounted_dir"
+    delete_if_directory_exist /tmp/mounted_target
 }
 
 @test "test set file via mounted dir" {
@@ -40,6 +41,24 @@ teardown() {
     sudo umount "$target_dir"
     assert_file_exist "$target_dir/test/$filename"
     assert_equal "$(cat $target_dir/test/$filename)" 'new_file'
+
+}
+
+@test "test check file via mounted dir" {
+
+    assert_dir_not_exist "$mounted_dir"
+    assert_file_not_exist "$target_dir/$filename"
+    create_file "$target_dir/test/$filename"
+    echo "old_file" >"$target_dir/test/$filename"
+    mkdir "/tmp/mounted_target"
+    sudo mount --bind "/tmp/mounted_target" "$target_dir"
+    assert_dir_not_exist "$target_dir/test"
+
+    cmd_set check_file_via_tmp_mount_directory "$filename" "$target_dir/test"
+
+    assert_dir_not_exist "$mounted_dir"
+    sudo umount "$target_dir"
+    assert_file_exist "$target_dir/test/$filename"
 
 }
 

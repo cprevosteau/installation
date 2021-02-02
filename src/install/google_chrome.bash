@@ -6,3 +6,7 @@ install_google_chrome(){
     sudo apt-get update
     sudo apt-get install -y google-chrome-stable
 }
+
+check_google_chrome(){
+    command -v google-chrome
+}

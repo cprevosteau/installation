@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 load ../import_helpers
-load_src install/google_chrome
+load_src install/gnome_extensions
 
 setup() {
     # executed before each test
@@ -13,10 +13,11 @@ teardown() {
 }
 
 @test "test_name" {
-    run check_google_chrome
+    sudo apt-get install -y gnupg2
+    run check_gnome_extensions
     assert_failure
 
-    cmd_set install_google_chrome 1>&3 2>&3
-    command -v google-chrome
-    check_google_chrome
+    cmd_set install_gnome_extensions 1>&3 2>&3
+    run check_gnome_extensions
+    assert_success
 }

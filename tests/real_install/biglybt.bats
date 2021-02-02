@@ -20,7 +20,11 @@ teardown() {
 }
 
 @test "real install biglybt" {
+    run check_biglybt
+    assert_failure
+
     cmd_set install_biglybt 2>&3 1>&3
+
     assert_dir_exist "$APP_DIR/biglybt"
     assert_file_exist "$APP_DIR/biglybt/biglybt"
     assert_file_not_exist "/tmp/BiglyBT_Installer.sh"

@@ -1,8 +1,15 @@
 ##!/usr/bin/env bash
 
 install_pyenv() {
-    install_pyenv_package "$PYENV_DIR"
+    if ! check_install_pyenv_package; then
+        install_pyenv_package "$PYENV_DIR"
+    fi
     config_pyenv "$PYENV_DIR"
+}
+
+check_pyenv() {
+    check_install_pyenv_package
+    check_config_pyenv
 }
 
 install_pyenv_package() {
@@ -14,6 +21,11 @@ install_pyenv_package() {
     git clone https://github.com/pyenv/pyenv.git "$pyenv_dir"
 }
 
+check_install_pyenv_package() {
+    command -v pyenv
+    [[ -d "$PYENV_DIR" ]]
+}
+
 config_pyenv() {
     local pyenv_dir="$1"
     {
@@ -23,4 +35,8 @@ config_pyenv() {
     # shellcheck disable=SC2016
     echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi'
     } >>"$BASHRC_FILEPATH"
+}
+
+check_config_pyenv() {
+    grep -q 'PYENV_ROOT' "$BASHRC_FILEPATH"
 }
