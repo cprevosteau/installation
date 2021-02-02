@@ -14,9 +14,6 @@ teardown() {
 }
 
 @test "install_bats" {
-    run check_bats
-    assert_failure
-
     cmd_set install_bats 2>&3
 
     command -v bats
