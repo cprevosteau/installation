@@ -1,27 +1,28 @@
 ##!/usr/bin/env bash
 include utils/decorators.bash
+include utils/checkers.bash
 
 
 install_docker() {
-  remove_old_docker_install
-  install_docker_package
-  add_user_to_docker_group
-  set_data_root_directory "$DOCKER_ROOT_DIR"
+    checker check_docker_install
+    if failure; then
+        remove_old_docker_install
+        install_docker_package
+        add_user_to_docker_group
+    fi
+    set_data_root_directory "$DOCKER_ROOT_DIR"
 }
 
 check_docker() {
-    command -v docker
-    local actual_data_root
-    actual_data_root=$(sudo docker info 2>/dev/null | grep "Docker Root Dir" | awk '(NR == 1){print $4}')
-    sudo runuser -l "$USER" -c "docker run hello-world" &>/dev/null
-    [[ "$actual_data_root" = "$SYSTEM_DIR/docker" ]]
+    check_docker_install
+    check_docker_data_root_directory
 }
 
 remove_old_docker_install() {
-  echo Remove old docker and install dependencies
-  sudo apt-get remove docker docker-engine docker.io containerd runc
-  sudo apt-get update
-  sudo apt-get install -y \
+    echo Remove old docker and install dependencies
+    sudo apt-get remove docker docker-engine docker.io containerd runc
+    sudo apt-get update
+    sudo apt-get install -y \
       apt-transport-https \
       ca-certificates \
       curl \
@@ -30,22 +31,27 @@ remove_old_docker_install() {
 }
 
 install_docker_package() {
-  echo Add Docker repository
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  sudo apt-key fingerprint 0EBFCD88
-  sudo add-apt-repository \
+    echo Add Docker repository
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    sudo apt-key fingerprint 0EBFCD88
+    sudo add-apt-repository \
      "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
      $(lsb_release -cs) \
      stable"
-  sudo apt-get update
+    sudo apt-get update
 
-  echo Install Docker
-  sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+    echo Install Docker
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 }
 
 add_user_to_docker_group() {
-  sudo usermod -aG docker "${USER}"
-  echo "You need to log out (and log in) to be able to use docker."
+    sudo usermod -aG docker "${USER}"
+    echo "You need to log out (and log in) to be able to use docker."
+}
+
+check_docker_install(){
+    check_command_in_new_env docker
+    sudo runuser -l "$USER" -c "docker run hello-world" &>/dev/null
 }
 
 set_data_root_directory() {
@@ -70,4 +76,10 @@ add_string_entry_to_json(){
     local tmp_file="/tmp/new_json.json"
     jq ".[\"$entry\"] |= \"$value\"" "$file" > "$tmp_file"
     mv "$tmp_file" "$file"
+}
+
+check_docker_data_root_directory(){
+    local actual_data_root
+    actual_data_root=$(sudo docker info 2>/dev/null | grep "Docker Root Dir" | awk '(NR == 1){print $4}')
+    [[ "$actual_data_root" = "$SYSTEM_DIR/docker" ]]
 }

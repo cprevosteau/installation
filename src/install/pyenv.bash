@@ -1,7 +1,9 @@
 ##!/usr/bin/env bash
+include utils/checkers.bash
 
 install_pyenv() {
-    if ! check_install_pyenv_package; then
+    checker check_install_pyenv_package
+    if failure; then
         install_pyenv_package "$PYENV_DIR"
     fi
     config_pyenv "$PYENV_DIR"
@@ -22,7 +24,7 @@ install_pyenv_package() {
 }
 
 check_install_pyenv_package() {
-    bash -ic "command -v pyenv"
+    check_command_in_new_env pyenv
     [[ -d "$PYENV_DIR" ]]
 }
 

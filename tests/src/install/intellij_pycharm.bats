@@ -14,27 +14,47 @@ teardown() {
     echo "teardown" >&3
 }
 
-@test "Test download intellij_pycharm (Is link active ?)" {
-    next_output_file="${intellij_file}"
+@test "Test intellij (Is link active ?)" {
     download_extract_to_dir() {
       local url="${1}"
       local output_directory="${2}"
-      download_status_code_to_file "${url}" "${next_output_file}"
+      download_status_code_to_file "${url}" "${intellij_file}"
       echo "${output_directory}"
-      next_output_file="${pycharm_file}"
     }
-    config_intellij_pycharm() {
-      echo "config_intellij_pycharm"
+    config_jetbrains() {
+      echo "config_jetbrains"
     }
-    run_set install_intellij_pycharm >&3 2>&3
+    run install_intellij >&3 2>&3
+
     assert_success
-    echo test intellij >&3
     assert_file_exist "${intellij_file}"
     assert_equal "$(cat "${intellij_file}")" 200
-    echo test pycharm >&3
+    assert_equal "${lines[0]}" "${APP_DIR}"
+    assert_equal "${lines[1]}" "config_jetbrains"
+}
+
+@test "Test pycharm (Is link active ?)" {
+    download_extract_to_dir() {
+      local url="${1}"
+      local output_directory="${2}"
+      download_status_code_to_file "${url}" "${pycharm_file}"
+      echo "${output_directory}"
+    }
+    config_jetbrains() {
+      echo "config_jetbrains"
+    }
+    run install_pycharm >&3 2>&3
+
+    assert_success
     assert_file_exist "${pycharm_file}"
     assert_equal "$(cat "${pycharm_file}")" 200
     assert_equal "${lines[0]}" "${APP_DIR}"
-    assert_equal "${lines[1]}" "${APP_DIR}"
-    assert_equal "${lines[2]}" "config_intellij_pycharm"
+    assert_equal "${lines[1]}" "config_jetbrains"
+}
+
+@test "config_jetbrains" {
+    run checker check_config_jetbrains
+    assert_failure
+    config_jetbrains
+    checker check_config_jetbrains
 }

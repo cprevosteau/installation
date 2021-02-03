@@ -1,20 +1,24 @@
 ##!/usr/bin/env bash
 include utils/download.bash
+include utils/checkers.bash
 
 BASE_PACKAGES=( jupyterlab jupytext pre-commit )
 
 install_miniconda() {
-    if ! check_miniconda_package; then
+    checker check_miniconda_package
+    if failure; then
         local -r miniconda_tmp_file="/tmp/miniconda_installer.sh"
         download_miniconda "$miniconda_tmp_file"
         install_miniconda_package "$miniconda_tmp_file"
         rm "$miniconda_tmp_file"
     fi
-    if ! check_config_miniconda; then
+    checker check_config_miniconda
+    if failure; then
         config_miniconda
     fi
-    if ! check_install_base_python_packages; then
-        install_base_python_packages
+    checker check_install_base_python_packages "${BASE_PACKAGES[@]}"
+    if failure ; then
+        install_base_python_packages "${BASE_PACKAGES[@]}"
     fi
 }
 
@@ -35,27 +39,30 @@ check_miniconda_package() {
     [[ -d "$MINICONDA_DIR" ]]
 }
 
-install_base_python_packages(){
-    conda install -y -c conda-forge -n base "${BASE_PACKAGES[@]}"
-}
-
-check_install_base_python_packages(){
-    for package in "$BASE_PACKAGES[@]"; do
-        command -v $package
-    done
-}
-
 download_miniconda() {
     local -r miniconda_installer_file="$1"
     download_file https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh "$miniconda_installer_file"
 }
 
 config_miniconda() {
+    echo config_miniconda
     #https://docs.anaconda.com/anaconda/install/silent-mode/
     eval "$("${MINICONDA_DIR}/bin/conda" 'shell.bash' 'hook' 2> /dev/null)"
     conda init
+    conda info
 }
 
 check_config_miniconda() {
-    env -i bash -ic "command -v conda" &>/dev/null
+    check_command_in_new_env conda
+}
+
+install_base_python_packages(){
+    conda install -y -c conda-forge -n base "${BASE_PACKAGES[@]}"
+}
+
+check_install_base_python_packages(){
+    local packages=( "$@" )
+    for package in "${packages[@]}"; do
+        check_command_in_new_env "$package"
+    done
 }

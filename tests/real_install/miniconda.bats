@@ -18,11 +18,7 @@ teardown() {
     run check_miniconda
     assert_failure
 
-    cmd_set install_miniconda 2>&3
+    cmd_set install_miniconda 1>&3
     assert_dir_exist "${MINICONDA_DIR}"
-    for package in "$BASE_PACKAGES[@]"; do
-        command -v $package
-    done
-    env -i bash -ic "command -v conda"
     check_miniconda
 }

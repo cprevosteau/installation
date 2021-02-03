@@ -8,7 +8,7 @@ setup() {
     app=test
     LOG_FILE="test.log"
     sudo mv /usr/sbin/reboot /usr/sbin/reboot_
-    echo 'echo reboot' | sudo tee /usr/sbin/reboot
+    echo 'echo reboot' | sudo tee /usr/sbin/reboot >/dev/null
     sudo chmod +x /usr/sbin/reboot
     exit() {
         echo exit $1
@@ -33,15 +33,10 @@ teardown() {
     spinner_install() {
        echo "$*"
     }
-    local options
-    set +e
 
-    output=$(check_or_install "$app")
-    options=$(set +o)
-    set -e
+    run check_or_install "$app"
 
     assert_output "$LOG_FILE $app"
-    echo $options | grep 'set +o errexit'
 }
 
 @test "test check_or_install when all tests of check succeed" {
@@ -52,7 +47,6 @@ teardown() {
     spinner_install() {
        echo "$*"
     }
-
     run_set check_or_install "$app"
     assert_output ""
 }
