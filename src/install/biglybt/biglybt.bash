@@ -1,7 +1,7 @@
 ##!/usr/bin/env bash
 include utils/move_to_system.bash
 include utils/download.bash
-include utils/checker.bash
+include utils/checkers.bash
 
 install_biglybt() {
     checker check_biglybt_install
