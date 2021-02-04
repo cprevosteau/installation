@@ -5,26 +5,23 @@ include utils/checkers.bash
 BASE_PACKAGES=( jupyterlab jupytext pre-commit )
 
 install_miniconda() {
-    checker check_miniconda_package
-    if failure; then
+    if ! check_miniconda_package; then
         local -r miniconda_tmp_file="/tmp/miniconda_installer.sh"
         download_miniconda "$miniconda_tmp_file"
         install_miniconda_package "$miniconda_tmp_file"
         rm "$miniconda_tmp_file"
     fi
-    checker check_config_miniconda
-    if failure; then
+    if ! check_config_miniconda; then
         config_miniconda
     fi
-    checker check_install_base_python_packages "${BASE_PACKAGES[@]}"
-    if failure ; then
+    if ! check_install_base_python_packages "${BASE_PACKAGES[@]}"; then
         install_base_python_packages "${BASE_PACKAGES[@]}"
     fi
 }
 
 check_miniconda() {
-    check_miniconda_package
-    check_config_miniconda
+    check_miniconda_package && \
+    check_config_miniconda && \
     check_install_base_python_packages
 }
 
@@ -64,5 +61,8 @@ check_install_base_python_packages(){
     local packages=( "$@" )
     for package in "${packages[@]}"; do
         check_command_in_new_env "$package"
+        if [[ ! $? -eq 0 ]]; then
+            return 1
+        fi
     done
 }

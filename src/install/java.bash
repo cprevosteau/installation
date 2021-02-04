@@ -8,7 +8,7 @@ install_java(){
 }
 
 check_java(){
-    command -v java
+    command -v java && \
     grep -q 'JAVA_HOME' "$BASHRC_FILEPATH"
 }
 

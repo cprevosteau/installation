@@ -36,7 +36,7 @@ teardown() {
         return 0
     }
 
-    run checker check_install_base_python_packages first_package missing_package third_package
+    run check_install_base_python_packages first_package missing_package third_package
     assert_failure
 }
 
@@ -45,6 +45,5 @@ teardown() {
         return 0
     }
 
-    run checker check_install_base_python_packages first_package missing_package third_package
-    assert_success
+    check_install_base_python_packages first_package missing_package third_package
 }

@@ -53,8 +53,8 @@ teardown() {
 }
 
 @test "config_jetbrains" {
-    run checker check_config_jetbrains
+    run check_config_jetbrains
     assert_failure
     config_jetbrains
-    checker check_config_jetbrains
+    check_config_jetbrains
 }

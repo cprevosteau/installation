@@ -7,8 +7,8 @@ install_files(){
 }
 
 check_files(){
-    check_file_via_tmp_mount_directory "$DECRYPTION_DESKTOP_FILE" "$AUTOSTART_DIR"
-    [[ -f "$HOME/$BASH_ALIASES_FILE" ]]
+    check_file_via_tmp_mount_directory "$DECRYPTION_DESKTOP_FILE" "$AUTOSTART_DIR" && \
+    [[ -f "$HOME/$BASH_ALIASES_FILE" ]] && \
     [[ -f "$HOME/$DECRYPT_FILE" ]]
 }
 
@@ -56,10 +56,12 @@ check_file_via_tmp_mount_directory(){
     local target_mounted_tmp_dir="$tmp_dir/$target_subdir"
     sudo mkdir -p "$tmp_dir"
     sudo mount --bind "$to_mount_dir" "$tmp_dir"
-    ls "$target_mounted_tmp_dir/$filename"
     sleep 1
+    ls "$target_mounted_tmp_dir/$filename" >/dev/null
+    local check_result="$?"
     sudo umount "$tmp_dir"
     sudo rm -rf "$tmp_dir"
+    return "$check_result"
 }
 
 find_first_mountpoint() {

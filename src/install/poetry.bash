@@ -5,7 +5,7 @@ install_poetry(){
     download_poetry | install_poetry_package "$POETRY_DIR"
 }
 check_poetry(){
-    [[ -d "$POETRY_DIR" ]]
+    [[ -d "$POETRY_DIR" ]] && \
     env -i HOME="$HOME" bash -lc "command -v poetry"
 }
 

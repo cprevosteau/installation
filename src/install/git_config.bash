@@ -4,6 +4,8 @@ install_git_config() {
 }
 
 check_git_config() {
-    [[ "$(git config --get --global user.email)" == "cprevosteau@gmail.com" ]]
-    [[ "$(git config --get --global user.name)" == "Clément PREVOSTEAU" ]]
+    [[ "$(git config --get --global user.email)" \
+        == "cprevosteau@gmail.com" ]] && \
+    [[ "$(git config --get --global user.name)" \
+        == "Clément PREVOSTEAU" ]]
 }

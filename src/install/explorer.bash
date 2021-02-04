@@ -8,8 +8,8 @@ install_explorer(){
 }
 
 check_explorer(){
-    check_bookmarks "${ENCRYPTED}" "/"
-    check_dark_theme
+    check_bookmarks "${ENCRYPTED}" "/" && \
+    check_dark_theme && \
     check_show_hidden_files
 }
 
@@ -28,6 +28,9 @@ check_bookmarks() {
     for folder in "${folders[@]}"
     do
         grep -q "file://${folder}" "$BOOKMARK_FILE"
+        if [[ ! $? -eq 0 ]]; then
+            return 1
+        fi
     done
 }
 

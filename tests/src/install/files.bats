@@ -44,7 +44,7 @@ teardown() {
 
 }
 
-@test "test check file via mounted dir" {
+@test "test check file via mounted dir when true" {
 
     assert_dir_not_exist "$mounted_dir"
     assert_file_not_exist "$target_dir/$filename"
@@ -54,11 +54,27 @@ teardown() {
     sudo mount --bind "/tmp/mounted_target" "$target_dir"
     assert_dir_not_exist "$target_dir/test"
 
-    cmd_set check_file_via_tmp_mount_directory "$filename" "$target_dir/test"
+    check_file_via_tmp_mount_directory "$filename" "$target_dir/test"
 
     assert_dir_not_exist "$mounted_dir"
     sudo umount "$target_dir"
     assert_file_exist "$target_dir/test/$filename"
+
+}
+
+@test "test check file via mounted dir when false" {
+
+    assert_dir_not_exist "$mounted_dir"
+    assert_file_not_exist "$target_dir/$filename"
+    mkdir "/tmp/mounted_target"
+    sudo mount --bind "/tmp/mounted_target" "$target_dir"
+    assert_dir_not_exist "$target_dir/test"
+
+    run check_file_via_tmp_mount_directory "$filename" "$target_dir/test"
+    assert_failure
+
+    assert_dir_not_exist "$mounted_dir"
+    sudo umount "$target_dir"
 
 }
 
@@ -87,7 +103,7 @@ teardown() {
     cmd_set cp_with_env_subst "$src_file_path" "$target_dir" \
                               '$TO_BE_REPLACED1 $TO_BE_REPLACED2'
     assert_file_exist "$target_dir/$filename"
-    grep "$TO_BE_REPLACED" "$target_dir/$filename" >&3
+    grep "$TO_BE_REPLACED" "$target_dir/$filename"
     grep "$TO_BE_REPLACED2 " "$target_dir/$filename"
     grep '$NOT_TO_BE_REPLACED' "$target_dir/$filename"
 }

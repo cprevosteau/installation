@@ -1,11 +1,10 @@
 ##!/usr/bin/env bash
 include utils/move_to_system.bash
 include utils/download.bash
-include utils/checkers.bash
 
 install_biglybt() {
     checker check_biglybt_install
-    if failure; then
+    if ! $check; then
         local tmp_biglybt_installer="/tmp/BiglyBT_Installer.sh"
         download_biglybt_installer "$tmp_biglybt_installer"
         install_expect

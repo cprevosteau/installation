@@ -15,10 +15,10 @@ teardown() {
 }
 
 @test "real installation miniconda" {
-    run check_miniconda
+    run checker check_miniconda
     assert_failure
 
     cmd_set install_miniconda 1>&3
     assert_dir_exist "${MINICONDA_DIR}"
-    check_miniconda
+    checker check_miniconda
 }

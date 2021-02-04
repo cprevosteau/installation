@@ -12,7 +12,7 @@ teardown() {
     echo "teardown" >&3
 }
 
-@test "checker" {
+@test "checker with if statement" {
     check_test(){
         echo in check >&3
         [ 2 = 2 ]
@@ -22,14 +22,43 @@ teardown() {
         [ 1 = 1 ]
     }
 
-    run checker check_test
-    assert_failure
+    checker check_test
+    if ! $check;
+    then
+        false
+    fi
+    echo $check >&3
+    checker true && $check
+    echo $check >&3
+    checker false
+    ! $check
+    echo $check >&3
+}
 
-    local options
+@test "checker idem in e option when check fails" {
+    local options_plus options_minus
+    set +e
+    checker false
+    options_plus=$(set +o)
+
+    set -e
+    checker true
+    options_minus=$(set +o)
+
+    echo $options_plus | grep 'set +o errexit'
+    echo $options_plus | grep 'set -o errexit'
+}
+
+@test "checker idem in e option when check succed" {
+    local options_plus options_minus
     set +e
     checker true
-    options=$(set +o)
-    set -e
+    options_plus=$(set +o)
 
-    echo $options | grep 'set +o errexit'
+    set -e
+    checker true
+    options_minus=$(set +o)
+
+    echo $options_plus | grep 'set +o errexit'
+    echo $options_plus | grep 'set -o errexit'
 }

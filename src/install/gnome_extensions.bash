@@ -8,7 +8,7 @@ install_gnome_extensions() {
 }
 
 check_gnome_extensions() {
-    command -v gnome-extensions
+    command -v gnome-extensions && \
     check_sound_chooser
 }
 

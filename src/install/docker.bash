@@ -4,8 +4,7 @@ include utils/checkers.bash
 
 
 install_docker() {
-    checker check_docker_install
-    if failure; then
+    if ! check_docker_install; then
         remove_old_docker_install
         install_docker_package
         add_user_to_docker_group
@@ -14,13 +13,13 @@ install_docker() {
 }
 
 check_docker() {
-    check_docker_install
+    check_docker_install && \
     check_docker_data_root_directory
 }
 
 remove_old_docker_install() {
     echo Remove old docker and install dependencies
-    sudo apt-get remove docker docker-engine docker.io containerd runc
+    sudo apt-get remove docker docker-engine docker.io containerd runc || true
     sudo apt-get update
     sudo apt-get install -y \
       apt-transport-https \
@@ -50,7 +49,7 @@ add_user_to_docker_group() {
 }
 
 check_docker_install(){
-    check_command_in_new_env docker
+    check_command_in_new_env docker && \
     sudo runuser -l "$USER" -c "docker run hello-world" &>/dev/null
 }
 
@@ -60,7 +59,7 @@ set_data_root_directory() {
     local docker_daemon_file="/etc/docker/daemon.json"
     if [ ! -f "$docker_daemon_file" ]; then
         sudo mkdir -p "$(dirname $docker_daemon_file)"
-        echo '{}' | sudo tee -a "$docker_daemon_file"
+        echo '{}' | sudo tee -a "$docker_daemon_file" >/dev/null
     fi
     sudo systemctl stop docker.socket
     sudo systemctl stop docker

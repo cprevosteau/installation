@@ -4,25 +4,31 @@ include utils/download.bash
 include utils/checkers.bash
 
 install_intellij(){
-    checker check_intellij_install
-    if failure; then
+    if ! check_intellij_install; then
         download_extract_to_dir "https://download.jetbrains.com/idea/ideaIC-2020.3.tar.gz" "${APP_DIR}"
     fi
-    checker check_config_jetbrains
-    if failure; then
+    if ! check_config_jetbrains; then
         config_jetbrains
     fi
 }
 
+check_intellij(){
+    check_intellij_install && \
+    check_config_jetbrains
+}
+
 install_pycharm(){
-    checker check_pycharm_install
-    if failure; then
+    if ! check_pycharm_install; then
         download_extract_to_dir "https://download.jetbrains.com/python/pycharm-community-2020.3.tar.gz"  "${APP_DIR}"
     fi
-    checker check_config_jetbrains
-    if failure; then
+    if ! check_config_jetbrains; then
         config_jetbrains
     fi
+}
+
+check_pycharm(){
+    check_pycharm_install && \
+    check_config_jetbrains
 }
 
 check_intellij_install() {

@@ -1,10 +1,11 @@
 #!/usr/bin/env bats
-load '../import_helpers'
+load ../import_helpers
+load_src install/bats
+load_src utils/checkers
 
 setup() {
     # executed before each test
     echo "setup" >&3
-    load_src install/bats
     bats_file="/usr/local/bin/bats"
 }
 
@@ -19,5 +20,5 @@ teardown() {
     command -v bats
     assert_dir_exist "${APP_DIR}/bats-core"
     assert_file_exist "${bats_file}"
-    check_bats
+    checker check_bats
 }

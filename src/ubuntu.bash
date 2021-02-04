@@ -5,8 +5,7 @@ include utils/checkers.bash
 
 check_or_install() {
     local app="$1"
-    checker "check_$app"
-    if failure; then
+    if ! eval "check_$app"; then
         spinner_install "$LOG_FILE" "$app"
     fi
 }

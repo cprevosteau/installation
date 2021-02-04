@@ -7,11 +7,32 @@ check_command_in_new_env() {
 
 checker() {
     local cmd_arr=("$@")
+    local old_state
+    old_state=$(set +o)
+    check=true
+    set +e
+    set -E
+    catch(){
+        echo "catch" >&3
+        check=false
+        return 1
+    }
+    trap catch ERR
     (
-        set -e
         eval "${cmd_arr[@]}"
-        set +e
+        echo  eval  "${cmd_arr[@]}" $? >&3
+        echo not fail >&3
     )
+    echo end of sub $? >&3
+    eval "$old_state"
+}
+
+get_e_option() {
+    if set +o | grep -q 'set +o errtrace'; then
+        echo +
+    else
+        echo -
+    fi
 }
 
 success() {

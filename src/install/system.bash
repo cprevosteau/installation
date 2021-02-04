@@ -19,5 +19,8 @@ check_system() {
     for directory in "${ORIGINAL_DIRS[@]}"
     do
         [[ -h "$HOME/$directory" ]]
+        if [[ ! $? -eq 0 ]]; then
+            return 1
+        fi
     done
 }

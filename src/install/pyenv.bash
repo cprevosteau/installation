@@ -3,14 +3,14 @@ include utils/checkers.bash
 
 install_pyenv() {
     checker check_install_pyenv_package
-    if failure; then
+    if ! $check; then
         install_pyenv_package "$PYENV_DIR"
     fi
     config_pyenv "$PYENV_DIR"
 }
 
 check_pyenv() {
-    check_install_pyenv_package
+    check_install_pyenv_package && \
     check_config_pyenv
 }
 
@@ -24,7 +24,7 @@ install_pyenv_package() {
 }
 
 check_install_pyenv_package() {
-    check_command_in_new_env pyenv
+    check_command_in_new_env pyenv && \
     [[ -d "$PYENV_DIR" ]]
 }
 

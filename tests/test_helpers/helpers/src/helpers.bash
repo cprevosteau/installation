@@ -44,6 +44,7 @@ load_src() {
   .  "${helpers_src_dir}/../../../../src/utils/import_src_and_env.bash"
   import_src_and_env
   .  "${SRC_DIR}/${src_name}.bash"
+  loader_finish
 }
 
 skip_if_not_in_docker(){

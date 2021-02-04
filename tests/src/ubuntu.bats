@@ -24,10 +24,8 @@ teardown() {
 
 @test "test check_or_install when at least one test of check fails" {
     check_test() {
-        echo in check >&3
-        [ 2 = 2 ]
-        [ 1 = 2 ]
-        echo after fail >&3
+        [ 2 = 2 ] && \
+        [ 1 = 2 ] && \
         [ 1 = 1 ]
     }
     spinner_install() {
@@ -41,7 +39,7 @@ teardown() {
 
 @test "test check_or_install when all tests of check succeed" {
     check_test() {
-        [ 2 = 2 ]
+        [ 2 = 2 ] && \
         [ 1 = 1 ]
     }
     spinner_install() {
