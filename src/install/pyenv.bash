@@ -2,8 +2,7 @@
 include utils/checkers.bash
 
 install_pyenv() {
-    checker check_install_pyenv_package
-    if ! $check; then
+    if ! check_install_pyenv_package; then
         install_pyenv_package "$PYENV_DIR"
     fi
     config_pyenv "$PYENV_DIR"

@@ -3,8 +3,7 @@ include utils/move_to_system.bash
 include utils/download.bash
 
 install_biglybt() {
-    checker check_biglybt_install
-    if ! $check; then
+    if ! check_biglybt_install; then
         local tmp_biglybt_installer="/tmp/BiglyBT_Installer.sh"
         download_biglybt_installer "$tmp_biglybt_installer"
         install_expect
@@ -15,7 +14,7 @@ install_biglybt() {
 }
 
 check_biglybt() {
-    check_biglybt_install
+    check_biglybt_install && \
     check_biglybt_symlink
 }
 
