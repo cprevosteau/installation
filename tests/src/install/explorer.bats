@@ -35,7 +35,7 @@ teardown() {
     expecteed_fourth_line="file://${folder2}"
 
     # When
-    run_set add_folders_to_bookmark "${folder1}" "${folder1}" "${folder2}"
+    cmd_set add_folders_to_bookmark "${folder1}" "${folder1}" "${folder2}"
     assert_success
 
     # THen

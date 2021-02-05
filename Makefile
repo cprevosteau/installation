@@ -105,7 +105,7 @@ test_real_install:
 	docker run -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" -v "${CURRENT_DIR}/data:${DATA_DIR}" $(ENCRYPTED_IMAGE) \
  		bats "${TESTS_DIR}/real_install/${COMMAND_ARGS}.bats" --tap
 
-REAL_INSTALLS = bats google_chrome intellij_pycharm java miniconda poetry pyenv slack
+REAL_INSTALLS = bats google_chrome intellij_pycharm java miniconda poetry pyenv slack explorer
 test_real_installs:
 	docker run -tv "${CURRENT_DIR}:${INSTALLATION_DIR}:ro" -v "${CURRENT_DIR}/data:${DATA_DIR}" $(ENCRYPTED_IMAGE) \
      		bats $(foreach real_install_file, $(REAL_INSTALLS), "${TESTS_DIR}/real_install/$(real_install_file).bats")
