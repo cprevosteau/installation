@@ -21,7 +21,7 @@ teardown() {
     run check_bookmarks /home/clement /home/clement/Downloads
     assert_success
 
-    run check_bookmark "/home/clement" "/koujougoujougou"
+    run check_bookmarks "/home/clement" "/koujougoujougou"
     assert_failure
 }
 
@@ -35,7 +35,7 @@ teardown() {
     expecteed_fourth_line="file://${folder2}"
 
     # When
-    cmd_set add_folders_to_bookmark "${folder1}" "${folder1}" "${folder2}"
+    run_set add_folders_to_bookmark "${folder1}" "${folder1}" "${folder2}"
     assert_success
 
     # THen
